@@ -1,13 +1,19 @@
 package gr.codehub.sacchon.service;
 
+import gr.codehub.sacchon.dto.BgMeasurementDTO;
+import gr.codehub.sacchon.dto.DciMeasurementDTO;
+import gr.codehub.sacchon.model.BgMeasurement;
 import gr.codehub.sacchon.model.Consultation;
+import gr.codehub.sacchon.model.DciMeasurement;
 import gr.codehub.sacchon.model.Patient;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
 public class MediDataVaultServiceImpl implements MediDataVaultService{
+
     @Override
     public Patient viewAccount(Long patientId) {
         return null;
@@ -24,22 +30,22 @@ public class MediDataVaultServiceImpl implements MediDataVaultService{
     }
 
     @Override
-    public BgMeasurementDTO addBgMeasurement(BgMeasurementDTO bgMeasurementDTO, Long patientId) {
+    public BgMeasurement addBgMeasurement(BgMeasurementDTO bgMeasurementDTO, Long patientId) throws RuntimeException {
         return null;
     }
 
     @Override
-    public DciMeasurementDTO addDciMeasurement(DciMeasurementDTO dciMeasurementDTO, Long patientId) {
+    public DciMeasurement addDciMeasurement(DciMeasurementDTO dciMeasurementDTO, Long patientId) {
         return null;
     }
 
     @Override
-    public Double averageBgMeasurement(String start, String stop, Long patientId) {
+    public Double averageBgMeasurement(LocalDate start, LocalDate stop, Long patientId) {
         return null;
     }
 
     @Override
-    public Double averageDciMeasurement(String start, String stop, Long patientId) {
+    public Double averageDciMeasurement(LocalDate start, LocalDate stop, Long patientId) {
         return null;
     }
 
