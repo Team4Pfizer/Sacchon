@@ -1,42 +1,39 @@
 package gr.codehub.sacchon.service;
 
+import gr.codehub.sacchon.dto.BgMeasurementDTO;
+import gr.codehub.sacchon.dto.DciMeasurementDTO;
+import gr.codehub.sacchon.model.BgMeasurement;
 import gr.codehub.sacchon.model.Consultation;
+import gr.codehub.sacchon.model.DciMeasurement;
 import gr.codehub.sacchon.model.Patient;
 
+import java.time.LocalDate;
 import java.util.List;
 
 
 public interface MediDataVaultService {
-    public Patient viewAccount(Long patientId);
-    public Patient signUp(Patient patient);
+    Patient viewAccount(Long patientId);
 
-    public boolean removeAccount (Long patientId);
+    Patient signUp(Patient patient);
 
-    public BgMeasurementDTO addBgMeasurement (BgMeasurementDTO bgMeasurementDTO, Long patientId);
-    public DciMeasurementDTO addDciMeasurement (DciMeasurementDTO dciMeasurementDTO, Long patientId);
+    boolean removeAccount(Long patientId);
 
-    public Double averageBgMeasurement (String start,String stop,Long patientId);
+    BgMeasurement addBgMeasurement(BgMeasurementDTO bgMeasurementDTO, Long patientId) throws RuntimeException;
 
-    public Double averageDciMeasurement (String start,String stop,Long patientId);
+    DciMeasurement addDciMeasurement(DciMeasurementDTO dciMeasurementDTO, Long patientId);
 
-    public List<Consultation> getConsultations (Long patientId);
+    Double averageBgMeasurement(LocalDate start, LocalDate stop, Long patientId);
 
-    public BgMeasurementDTO updateBgMeasurement (BgMeasurementDTO bgMeasurementDTO, Long patientId);
+    Double averageDciMeasurement(LocalDate start, LocalDate stop, Long patientId);
 
-    public DciMeasurementDTO updateDciMeasurement (DciMeasurementDTO dciMeasurementDTO, Long patientId);
+    List<Consultation> getConsultations(Long patientId);
 
-    public boolean deleteBgMeasurement (Long bgMeasurementId);
+    BgMeasurementDTO updateBgMeasurement(BgMeasurementDTO bgMeasurementDTO, Long patientId);
 
-    public boolean deleteDciMeasurement (Long dciMeasurementId);
+    DciMeasurementDTO updateDciMeasurement(DciMeasurementDTO dciMeasurementDTO, Long patientId);
 
+    boolean deleteBgMeasurement(Long bgMeasurementId);
 
-
-
-
-
-
-
-
-
+    boolean deleteDciMeasurement(Long dciMeasurementId);
 
 }
