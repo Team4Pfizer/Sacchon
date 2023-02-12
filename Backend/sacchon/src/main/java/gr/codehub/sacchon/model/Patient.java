@@ -8,6 +8,9 @@ import jakarta.persistence.Id;
 import lombok.*;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -34,6 +37,8 @@ public class Patient {
     private int userAge ;
 
     //---
+
+
 
 
 }
