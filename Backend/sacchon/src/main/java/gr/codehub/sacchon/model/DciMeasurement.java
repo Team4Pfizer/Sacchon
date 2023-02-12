@@ -1,4 +1,4 @@
 package gr.codehub.sacchon.model;
 
-public class dciMeasurement {
+public class DciMeasurement {
 }

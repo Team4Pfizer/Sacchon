@@ -2,7 +2,6 @@ package gr.codehub.sacchon.service;
 
 import gr.codehub.sacchon.model.Consultation;
 import gr.codehub.sacchon.model.Patient;
-import gr.codehub.sacchon.model.bgMeasurement;
 
 import java.util.List;
 
