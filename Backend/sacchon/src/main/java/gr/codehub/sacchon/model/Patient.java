@@ -20,14 +20,18 @@ public class Patient {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long patientId ;
-    private String firstname ;
-    private String lastname ;
 
-    private String email ;
+    private String firstName ;
+    private String lastName ;
+
+
+    private String userEmail ;
+    private String userPassword ;
+    // has to be hashed in the db
 
     private Date registrationDate;
 
-    private int age ;
+    private int userAger ;
 
     //---
 
