@@ -9,6 +9,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
+
 @Entity
 @Getter
 @Setter
@@ -21,5 +23,6 @@ public class DciMeasurement {
     private Long measurementId;
 
     private double dciMeasurementData;
+    private LocalDate dciMeasurementDate;
 
 }
