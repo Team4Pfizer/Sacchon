@@ -34,6 +34,8 @@ public class Patient {
 
     private int userAge ;
 
+    private boolean hasConsultant; // if the patient has or has no consultant
+
     //---
 
 
