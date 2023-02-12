@@ -31,7 +31,7 @@ public class Patient {
 
     private Date registrationDate;
 
-    private int userAger ;
+    private int userAge ;
 
     //---
 
