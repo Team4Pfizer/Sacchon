@@ -1,9 +1,11 @@
 package gr.codehub.sacchon.model;
 
 
+import com.sun.source.doctree.DocTree;
 import jakarta.persistence.*;
 import lombok.*;
 
+import javax.print.Doc;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -37,6 +39,22 @@ public class Patient {
     private boolean hasConsultant; // if the patient has or has no consultant
 
     //---
+
+    @ManyToOne // many patients can have one doctor
+    @JoinColumn(name = "doctorId")
+    private Doctor doctor; // the patient's doctor
+
+    @OneToMany(mappedBy = "patient")
+    private Set<Consultation> consultations = new HashSet<>(); // the patient's consultations
+
+    @OneToMany(mappedBy = "patient")
+    private Set<BgMeasurement> bgMeasurements = new HashSet<>(); // the patient's bg measurements
+
+    @OneToMany
+    private Set<DciMeasurement> dciMeasurements = new HashSet<>(); // the patient's dci measurements
+
+
+
 
 
 
