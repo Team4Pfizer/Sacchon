@@ -6,10 +6,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import javax.print.Doc;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Getter
 @Setter
@@ -54,9 +51,20 @@ public class Patient {
     private Set<DciMeasurement> dciMeasurements = new HashSet<>(); // the patient's dci measurements
 
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
+        Patient patient = (Patient) o;
 
+        return Objects.equals(patientId, patient.patientId);
+    }
 
+    @Override
+    public int hashCode() {
+        return patientId != null ? patientId.hashCode() : 0;
+    }
 
 
 }
