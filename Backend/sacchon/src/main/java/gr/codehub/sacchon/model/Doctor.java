@@ -3,6 +3,7 @@ package gr.codehub.sacchon.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.Objects;
 import java.util.Set;
 
 @Getter
@@ -30,7 +31,18 @@ public class Doctor {
     private Set<Consultation> consultations;
 
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
+        Doctor doctor = (Doctor) o;
 
+        return Objects.equals(doctorId, doctor.doctorId);
+    }
 
+    @Override
+    public int hashCode() {
+        return doctorId != null ? doctorId.hashCode() : 0;
+    }
 }
