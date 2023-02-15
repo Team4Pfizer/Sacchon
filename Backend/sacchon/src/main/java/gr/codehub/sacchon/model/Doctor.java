@@ -26,7 +26,7 @@ public class Doctor {
     @OneToMany(mappedBy = "doctor")
     private Set<Patient> patients;
 
-    @ManyToMany
+    @OneToMany(mappedBy = "doctor")
     private Set<Consultation> consultations;
 
 
