@@ -23,4 +23,14 @@ public class ChiefDoctor {
     private String password;
 
 
+    @Override
+    public String toString() {
+        return "ChiefDoctor{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", surname='" + surname + '\'' +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                '}';
+    }
 }
