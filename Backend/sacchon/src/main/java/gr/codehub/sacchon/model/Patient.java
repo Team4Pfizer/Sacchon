@@ -1,12 +1,13 @@
 package gr.codehub.sacchon.model;
 
 
-import com.sun.source.doctree.DocTree;
 import jakarta.persistence.*;
 import lombok.*;
 
-import javax.print.Doc;
-import java.util.*;
+import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -29,7 +30,7 @@ public class Patient {
     private String userPassword ;
     // has to be hashed in the db
 
-    private Date registrationDate;
+    private LocalDate registrationDate;
 
     private int userAge ;
 

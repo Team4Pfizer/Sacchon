@@ -1,15 +1,18 @@
 package gr.codehub.sacchon.model;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.Objects;
 
 @Entity
 @Getter
 @Setter
+@Builder
 @Table(name="CONSULTATIONS")
 public class Consultation {
 
@@ -17,7 +20,7 @@ public class Consultation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long consultationId;
     private String message ; // the consultation message
-    private Date consultationOfMonth; // not sure if valid
+    private LocalDate consultationOfMonth; // not sure if valid
 
 
 

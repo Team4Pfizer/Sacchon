@@ -2,6 +2,7 @@ package gr.codehub.sacchon.service;
 
 import gr.codehub.sacchon.dto.BgMeasurementDTO;
 import gr.codehub.sacchon.dto.DciMeasurementDTO;
+import gr.codehub.sacchon.dto.PatientDTO;
 import gr.codehub.sacchon.model.BgMeasurement;
 import gr.codehub.sacchon.model.Consultation;
 import gr.codehub.sacchon.model.DciMeasurement;
@@ -14,7 +15,7 @@ import java.util.List;
 public interface MediDataVaultService {
     Patient viewAccount(Long patientId);
 
-    Patient signUp(Patient patient);
+    Patient signUp(PatientDTO patientDTO);
 
     boolean removeAccount(Long patientId);
 

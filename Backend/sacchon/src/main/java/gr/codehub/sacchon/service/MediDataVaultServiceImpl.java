@@ -2,17 +2,23 @@ package gr.codehub.sacchon.service;
 
 import gr.codehub.sacchon.dto.BgMeasurementDTO;
 import gr.codehub.sacchon.dto.DciMeasurementDTO;
+import gr.codehub.sacchon.dto.PatientDTO;
 import gr.codehub.sacchon.model.BgMeasurement;
 import gr.codehub.sacchon.model.Consultation;
 import gr.codehub.sacchon.model.DciMeasurement;
 import gr.codehub.sacchon.model.Patient;
+import gr.codehub.sacchon.repository.PatientRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
 
 @Service
-public class MediDataVaultServiceImpl implements MediDataVaultService{
+@AllArgsConstructor
+public class MediDataVaultServiceImpl implements MediDataVaultService {
+
+    private final PatientRepository patientRepository;
 
     @Override
     public Patient viewAccount(Long patientId) {
@@ -20,7 +26,7 @@ public class MediDataVaultServiceImpl implements MediDataVaultService{
     }
 
     @Override
-    public Patient signUp(Patient patient) {
+    public Patient signUp(PatientDTO patientDTO) {
         return null;
     }
 

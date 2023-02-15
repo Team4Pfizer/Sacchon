@@ -8,10 +8,7 @@ public class SacchonApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(SacchonApplication.class, args);
-		//test to commit
-		// test 2 to commit
-		//commit test 3
-		//teeeest to commit
+
 	}
 
 }

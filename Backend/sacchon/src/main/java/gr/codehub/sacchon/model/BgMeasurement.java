@@ -1,12 +1,10 @@
 package gr.codehub.sacchon.model;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
-import java.sql.Time;
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Objects;
 
 
@@ -14,6 +12,8 @@ import java.util.Objects;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Table(name = "BG_MEASUREMENTS")
 public class BgMeasurement {
 
@@ -25,9 +25,9 @@ public class BgMeasurement {
     private Long measurementId ;
 
     private double measurementMg;
-    private Date measurementDate;
+    private LocalDate measurementDate;
 
-    private Time measurementTime;
+    private LocalTime measurementTime;
 
     @ManyToOne (fetch = FetchType.LAZY)
        @JoinTable(name = "PATIENT_BG_MEASUREMENTS",

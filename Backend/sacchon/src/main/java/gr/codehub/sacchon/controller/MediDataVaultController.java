@@ -2,6 +2,7 @@ package gr.codehub.sacchon.controller;
 
 import gr.codehub.sacchon.dto.BgMeasurementDTO;
 import gr.codehub.sacchon.dto.DciMeasurementDTO;
+import gr.codehub.sacchon.dto.PatientDTO;
 import gr.codehub.sacchon.model.BgMeasurement;
 import gr.codehub.sacchon.model.Consultation;
 import gr.codehub.sacchon.model.DciMeasurement;
@@ -25,8 +26,8 @@ public class MediDataVaultController {
     }
 
     @PostMapping("/Patient")
-    public Patient signUp(@RequestBody Patient patient){
-        return  mediDataVaultService.signUp(patient);
+    public Patient signUp(@RequestBody PatientDTO patientDTO){
+        return  mediDataVaultService.signUp(patientDTO);
     }
 
     @DeleteMapping("/Patient/{id}")
