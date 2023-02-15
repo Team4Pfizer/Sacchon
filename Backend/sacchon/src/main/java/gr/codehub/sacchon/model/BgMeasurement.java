@@ -46,4 +46,15 @@ public class BgMeasurement {
     public int hashCode() {
         return measurementId != null ? measurementId.hashCode() : 0;
     }
+
+    @Override
+    public String toString() {
+        return "BgMeasurement{" +
+                "measurementId=" + measurementId +
+                ", measurementMg=" + measurementMg +
+                ", measurementDate=" + measurementDate +
+                ", measurementTime=" + measurementTime +
+                ", patient=" + patient +
+                '}';
+    }
 }
