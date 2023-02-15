@@ -29,7 +29,7 @@ public class BgMeasurement {
     private Time measurementTime;
 
     @ManyToOne (fetch = FetchType.LAZY)
-    @JoinColumn(name = "patient_id")
+    @JoinColumn(name = "patient_id") // needs fixing
     private Patient patient;
 
     @Override
