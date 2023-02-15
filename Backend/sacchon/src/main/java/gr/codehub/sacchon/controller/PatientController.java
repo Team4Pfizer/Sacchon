@@ -1,4 +1,9 @@
 package gr.codehub.sacchon.controller;
 
-public class PatientController {
+
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+public class PatientController
+{
 }
