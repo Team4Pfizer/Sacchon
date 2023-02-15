@@ -14,6 +14,7 @@ import java.util.Objects;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "DCI_MEASUREMENTS")
 public class DciMeasurement {
 
     @Id
