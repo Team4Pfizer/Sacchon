@@ -24,10 +24,10 @@ public class Doctor {
 
 
     @OneToMany(mappedBy = "doctor")
-    Set<Patient> patients;
+    private Set<Patient> patients;
 
     @ManyToMany
-    Set<Consultation> consultations;
+    private Set<Consultation> consultations;
 
 
 
