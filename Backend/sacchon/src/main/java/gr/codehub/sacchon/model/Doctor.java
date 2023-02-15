@@ -3,6 +3,8 @@ package gr.codehub.sacchon.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.Set;
+
 @Getter
 @Setter
 @Entity
@@ -19,6 +21,15 @@ public class Doctor {
     private String userPassword;
     private String firstName;
     private String lastName;
+
+
+    @OneToMany(mappedBy = "doctor")
+    Set<Patient> patients;
+
+    @ManyToMany
+    Set<Consultation> consultations;
+
+
 
 
 
