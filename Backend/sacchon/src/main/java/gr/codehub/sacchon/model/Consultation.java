@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Date;
+import java.util.Objects;
 
 @Entity
 @Getter
@@ -29,6 +30,18 @@ public class Consultation {
     private Doctor doctor; // the doctor that the consultation is abou
 
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
+        Consultation that = (Consultation) o;
 
+        return Objects.equals(consultationId, that.consultationId);
+    }
+
+    @Override
+    public int hashCode() {
+        return consultationId != null ? consultationId.hashCode() : 0;
+    }
 }
