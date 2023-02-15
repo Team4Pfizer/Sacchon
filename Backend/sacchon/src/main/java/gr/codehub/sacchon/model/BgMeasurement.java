@@ -29,10 +29,7 @@ public class BgMeasurement {
     private Time measurementTime;
 
     @ManyToOne (fetch = FetchType.LAZY)
-    @JoinTable(name = "patient_bg_measurement",
-            joinColumns = @JoinColumn(name = "measurement_id"),
-            inverseJoinColumns = @JoinColumn(name = "patient_id"))
-
+      @JoinColumn(name = "patient_id")
     private Patient patient;
 
     @Override
