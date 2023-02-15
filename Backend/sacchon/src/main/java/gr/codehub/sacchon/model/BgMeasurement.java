@@ -14,6 +14,7 @@ import java.util.Objects;
 @Getter
 @Setter
 @NoArgsConstructor
+@Table(name = "BG_MEASUREMENTS")
 public class BgMeasurement {
 
 
@@ -29,7 +30,7 @@ public class BgMeasurement {
     private Time measurementTime;
 
     @ManyToOne (fetch = FetchType.LAZY)
-      @JoinColumn(name = "patient_id")
+      @JoinColumn(name = "patient_id") // patient_id is the name of the column in the table
     private Patient patient;
 
     @Override
