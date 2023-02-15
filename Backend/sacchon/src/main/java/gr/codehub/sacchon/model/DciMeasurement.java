@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 @Entity
 @Getter
@@ -25,5 +26,21 @@ public class DciMeasurement {
     @ManyToOne (fetch = FetchType.LAZY)
     @JoinColumn(name = "patient_id")
     private Patient patient;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        DciMeasurement that = (DciMeasurement) o;
+
+        return Objects.equals(measurementId, that.measurementId);
+    }
+
+    @Override
+    public int hashCode() {
+        return measurementId != null ? measurementId.hashCode() : 0;
+    }
+
 
 }
