@@ -45,4 +45,17 @@ public class Doctor {
     public int hashCode() {
         return doctorId != null ? doctorId.hashCode() : 0;
     }
+
+    @Override
+    public String toString() {
+        return "Doctor{" +
+                "doctorId=" + doctorId +
+                ", userEmail='" + userEmail + '\'' +
+                ", userPassword='" + userPassword + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", patients=" + patients +
+                ", consultations=" + consultations +
+                '}';
+    }
 }
