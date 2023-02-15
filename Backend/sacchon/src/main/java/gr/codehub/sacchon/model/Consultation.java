@@ -44,4 +44,15 @@ public class Consultation {
     public int hashCode() {
         return consultationId != null ? consultationId.hashCode() : 0;
     }
+
+    @Override
+    public String toString() {
+        return "Consultation{" +
+                "consultationId=" + consultationId +
+                ", message='" + message + '\'' +
+                ", consultationOfMonth=" + consultationOfMonth +
+                ", patient=" + patient +
+                ", doctor=" + doctor +
+                '}';
+    }
 }
