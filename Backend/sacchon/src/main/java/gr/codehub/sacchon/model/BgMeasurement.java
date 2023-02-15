@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import java.sql.Time;
 import java.util.Date;
+import java.util.Objects;
 
 
 @Entity
@@ -31,7 +32,18 @@ public class BgMeasurement {
     @JoinColumn(name = "patient_id")
     private Patient patient;
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
+        BgMeasurement that = (BgMeasurement) o;
 
+        return Objects.equals(measurementId, that.measurementId);
+    }
 
+    @Override
+    public int hashCode() {
+        return measurementId != null ? measurementId.hashCode() : 0;
+    }
 }
