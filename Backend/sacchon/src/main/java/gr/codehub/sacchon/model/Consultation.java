@@ -10,6 +10,7 @@ import java.util.Objects;
 @Entity
 @Getter
 @Setter
+@Table(name="CONSULTATIONS")
 public class Consultation {
 
     @Id
