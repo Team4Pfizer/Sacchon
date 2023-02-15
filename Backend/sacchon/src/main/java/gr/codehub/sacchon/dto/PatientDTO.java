@@ -13,8 +13,8 @@ public class PatientDTO {
     private String firstName ;
     private String lastName ;
     private String userEmail ;
-    private LocalDate registrationDate;
-    private int userAge ;
+//    private LocalDate registrationDate;
+//    private int userAge ;
 
 
 }

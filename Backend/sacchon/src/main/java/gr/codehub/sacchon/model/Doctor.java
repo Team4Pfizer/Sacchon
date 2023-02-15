@@ -19,43 +19,19 @@ public class Doctor {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long doctorId ;
     private String userEmail ;
-    private String userPassword;
+//    private String userPassword;
     private String firstName;
     private String lastName;
 
 
     @OneToMany(mappedBy = "doctor")
+
     private Set<Patient> patients;
 
-    @OneToMany(mappedBy = "doctor")
-    private Set<Consultation> consultations;
 
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+//    private Set<Consultation> consultations;
 
-        Doctor doctor = (Doctor) o;
 
-        return Objects.equals(doctorId, doctor.doctorId);
-    }
 
-    @Override
-    public int hashCode() {
-        return doctorId != null ? doctorId.hashCode() : 0;
-    }
-
-    @Override
-    public String toString() {
-        return "Doctor{" +
-                "doctorId=" + doctorId +
-                ", userEmail='" + userEmail + '\'' +
-                ", userPassword='" + userPassword + '\'' +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", patients=" + patients +
-                ", consultations=" + consultations +
-                '}';
-    }
 }

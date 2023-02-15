@@ -27,7 +27,15 @@ public class MediDataVaultServiceImpl implements MediDataVaultService {
 
     @Override
     public Patient signUp(PatientDTO patientDTO) {
-        return null;
+        System.out.println(patientDTO);
+        System.out.flush();
+        return patientRepository.save(
+                Patient
+                        .builder()
+                        .userEmail(patientDTO.getUserEmail())
+                        .firstName(patientDTO.getFirstName())
+                        .lastName(patientDTO.getLastName())
+                        .build());
     }
 
     @Override
