@@ -1,9 +1,6 @@
 package gr.codehub.sacchon.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -19,6 +16,18 @@ public class Consultation {
     private Long consultationId;
     private String message ; // the consultation message
     private Date consultationOfMonth; // not sure if valid
+
+
+
+    @ManyToOne (fetch = FetchType.LAZY)
+    @JoinColumn(name = "patient_id")
+
+    private Patient patient; // the patient that the consultation is abou
+
+    @ManyToOne (fetch = FetchType.LAZY)
+    @JoinColumn(name = "doctor_id")
+    private Doctor doctor; // the doctor that the consultation is abou
+
 
 
 
