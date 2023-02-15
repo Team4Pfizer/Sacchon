@@ -42,5 +42,13 @@ public class DciMeasurement {
         return measurementId != null ? measurementId.hashCode() : 0;
     }
 
-
+    @Override
+    public String toString() {
+        return "DciMeasurement{" +
+                "measurementId=" + measurementId +
+                ", dciMeasurementData=" + dciMeasurementData +
+                ", dciMeasurementDate=" + dciMeasurementDate +
+                ", patient=" + patient +
+                '}';
+    }
 }
