@@ -17,6 +17,7 @@ import java.util.Map;
 
 @RestController
 @AllArgsConstructor
+@RequestMapping("/medidatavault")
 public class MediDataVaultController {
 
     private MediDataVaultService mediDataVaultService;
