@@ -4,8 +4,7 @@ import gr.codehub.sacchon.model.Patient;
 import lombok.*;
 
 
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder

@@ -4,6 +4,7 @@ import gr.codehub.sacchon.dto.BgMeasurementDTO;
 import gr.codehub.sacchon.dto.ConsultationDTO;
 import gr.codehub.sacchon.dto.DciMeasurementDTO;
 import gr.codehub.sacchon.dto.PatientDTO;
+import gr.codehub.sacchon.exception.NotFoundException;
 import gr.codehub.sacchon.model.BgMeasurement;
 import gr.codehub.sacchon.model.Consultation;
 import gr.codehub.sacchon.model.DciMeasurement;
@@ -16,10 +17,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -33,17 +31,33 @@ public class MediDataVaultServiceImpl implements MediDataVaultService {
     private final ConsulationRepository consulationRepository;
 
 
-    private Patient getPatient(String patientEmailId) throws RuntimeException {
+    private Patient getPatient(String patientEmailId)  throws NotFoundException{
         Optional<Patient> patientOptional = patientRepository.findByPatientEmailIdIgnoreCase(patientEmailId);
         if (patientOptional.isPresent()) {
             return patientOptional.get();
         } else {
-            throw new RuntimeException("No patient with this ID: " + patientEmailId);
+            throw new NotFoundException("No patient with this Email: " + patientEmailId);
         }
     }
-    public PatientDTO viewAccount(String patientEmailId){
+    public Map< String , Object > viewAccount(String patientEmailId) throws NotFoundException{
+        Map< String, Object > viewAccountMap =new HashMap<>();
+        Patient patient = getPatient(patientEmailId);
 
-        return new PatientDTO(getPatient(patientEmailId));
+        viewAccountMap.put("patient",new PatientDTO(patient));
+        viewAccountMap.put("bgMeasurements",bgMeasurementRepository
+                .findBgMeasurementByPatient(patient)
+                .stream()
+                .map(BgMeasurementDTO::new)
+                .collect(Collectors.toList()));
+
+        viewAccountMap.put("dciMeasurements",dciMeasurementRepository
+                .findDciMeasurementByPatient(patient)
+                .stream()
+                .map(DciMeasurementDTO::new)
+                .collect(Collectors.toList()));
+
+
+        return viewAccountMap;
     }
 
 
@@ -54,7 +68,7 @@ public class MediDataVaultServiceImpl implements MediDataVaultService {
     }
 
     @Override
-    public boolean removeAccount(String patientEmailId) {
+    public boolean removeAccount(String patientEmailId) throws NotFoundException{
         try {
             Patient patient = getPatient(patientEmailId);
             patientRepository.delete(patient);
@@ -65,7 +79,7 @@ public class MediDataVaultServiceImpl implements MediDataVaultService {
     }
 
     @Override
-    public BgMeasurementDTO addBgMeasurement(BgMeasurementDTO bgMeasurementDTO, String patientEmailId) throws RuntimeException {
+    public BgMeasurementDTO addBgMeasurement(BgMeasurementDTO bgMeasurementDTO, String patientEmailId) throws NotFoundException {
 
         BgMeasurement savedBgMeasurement = bgMeasurementRepository.save(bgMeasurementDTO.toEntity(getPatient(patientEmailId)));
         return new BgMeasurementDTO(savedBgMeasurement);
@@ -73,13 +87,13 @@ public class MediDataVaultServiceImpl implements MediDataVaultService {
     }
 
     @Override
-    public DciMeasurementDTO addDciMeasurement(DciMeasurementDTO dciMeasurementDTO, String patientEmailId)throws RuntimeException {
+    public DciMeasurementDTO addDciMeasurement(DciMeasurementDTO dciMeasurementDTO, String patientEmailId) throws NotFoundException{
         DciMeasurement savedDciMeasurement = dciMeasurementRepository.save(dciMeasurementDTO.toEntity(getPatient(patientEmailId)));
         return new DciMeasurementDTO(savedDciMeasurement);
     }
 
     @Override
-    public Double averageBgMeasurement(LocalDate start, LocalDate stop, String patientEmailId) {
+    public Double averageBgMeasurement(LocalDate start, LocalDate stop, String patientEmailId) throws NotFoundException{
         List<BgMeasurement> bgMeasurementList = bgMeasurementRepository
                 .findBgMeasurementByBgMeasurementDateIsBetweenAndPatient(start,stop,getPatient(patientEmailId));
         return bgMeasurementList.stream()
@@ -91,7 +105,7 @@ public class MediDataVaultServiceImpl implements MediDataVaultService {
     }
 
     @Override
-    public Double averageDciMeasurement(LocalDate start, LocalDate stop, String patientEmailId) {
+    public Double averageDciMeasurement(LocalDate start, LocalDate stop, String patientEmailId) throws NotFoundException{
         List<DciMeasurement> dciMeasurementList =dciMeasurementRepository
                 .findDciMeasurementByDciMeasurementDateIsBetweenAndPatient(start,stop,getPatient(patientEmailId));
 
@@ -102,7 +116,7 @@ public class MediDataVaultServiceImpl implements MediDataVaultService {
     }
 
     @Override
-    public List<ConsultationDTO> getConsultations(String patientEmailId) {
+    public List<ConsultationDTO> getConsultations(String patientEmailId) throws NotFoundException{
         Patient patient =getPatient(patientEmailId);
         List<Consultation> consultations = consulationRepository.findConsultationByPatient(patient);
 
@@ -113,9 +127,9 @@ public class MediDataVaultServiceImpl implements MediDataVaultService {
     }
 
     @Override
-    public BgMeasurementDTO updateBgMeasurement(BgMeasurementDTO bgMeasurementDTO, LocalDate measurementDate, LocalTime measurementTime, String patientEmailId) throws RuntimeException{
+    public BgMeasurementDTO updateBgMeasurement(BgMeasurementDTO bgMeasurementDTO, Long measurementId, String patientEmailId) throws NotFoundException{
         Patient patient = getPatient(patientEmailId);
-        Optional<BgMeasurement> bgMeasurementOptional = bgMeasurementRepository.findBgMeasurementByDateByTimeAndPatient(measurementDate,measurementTime,patient);
+        Optional<BgMeasurement> bgMeasurementOptional = bgMeasurementRepository.findBgMeasurementByIdAndPatient(measurementId,patient);
         if (bgMeasurementOptional.isPresent()) {
             BgMeasurement bgMeasurement = bgMeasurementOptional.get();
 
@@ -130,13 +144,13 @@ public class MediDataVaultServiceImpl implements MediDataVaultService {
             }
             return new BgMeasurementDTO(bgMeasurementRepository.save(bgMeasurement));
         }else
-            throw new RuntimeException("No Blood glucose level measurement with this ID: " + patientEmailId+ " and this Date: "+measurementDate);
+            throw new NotFoundException("No Blood glucose level measurement with this Email Id: " + patientEmailId+ " and this Measurement Id: "+measurementId);
     }
 
     @Override
-    public DciMeasurementDTO updateDciMeasurement(DciMeasurementDTO dciMeasurementDTO, LocalDate measurementDate, String patientEmailId) {
+    public DciMeasurementDTO updateDciMeasurement(DciMeasurementDTO dciMeasurementDTO,Long measurementId, String patientEmailId) throws NotFoundException{
         Patient patient = getPatient(patientEmailId);
-        Optional<DciMeasurement> dciMeasurementOptional = dciMeasurementRepository.findBgMeasurementByDateAndPatient(measurementDate,patient);
+        Optional<DciMeasurement> dciMeasurementOptional = dciMeasurementRepository.findBgMeasurementByIdAndPatient(measurementId,patient);
         if (dciMeasurementOptional.isPresent()) {
             DciMeasurement dciMeasurement = dciMeasurementOptional.get();
             if (Objects.nonNull(dciMeasurementDTO.getDciMeasurementDate())) {
@@ -147,14 +161,14 @@ public class MediDataVaultServiceImpl implements MediDataVaultService {
             }
             return new DciMeasurementDTO(dciMeasurementRepository.save(dciMeasurement));
         }else {
-            throw new RuntimeException("No Daily Carb measurement with this ID: " + patientEmailId+ " and this Date: "+measurementDate);
+            throw new NotFoundException("No Daily Carb measurement with this Email Id: " + patientEmailId+ " and this Measurement Id: "+measurementId);
         }
     }
 
     @Override
-    public boolean deleteBgMeasurement(LocalDate measurementDate,LocalTime measurementTime, String patientEmailId) {
+    public boolean deleteBgMeasurement(Long measurementId, String patientEmailId) throws NotFoundException {
         Patient patient = getPatient(patientEmailId);
-        Optional<BgMeasurement> bgMeasurementOptional = bgMeasurementRepository.findBgMeasurementByDateByTimeAndPatient(measurementDate, measurementTime, patient);
+        Optional<BgMeasurement> bgMeasurementOptional = bgMeasurementRepository.findBgMeasurementByIdAndPatient(measurementId, patient);
 
         if (bgMeasurementOptional.isPresent()) {
             bgMeasurementRepository.delete(bgMeasurementOptional.get());
@@ -166,9 +180,9 @@ public class MediDataVaultServiceImpl implements MediDataVaultService {
     }
 
     @Override
-    public boolean deleteDciMeasurement(LocalDate measurementDate, String patientEmailId) {
+    public boolean deleteDciMeasurement(Long measurementId, String patientEmailId) throws NotFoundException {
         Patient patient = getPatient(patientEmailId);
-        Optional<DciMeasurement> dciMeasurementOptional = dciMeasurementRepository.findBgMeasurementByDateAndPatient(measurementDate,patient);
+        Optional<DciMeasurement> dciMeasurementOptional = dciMeasurementRepository.findBgMeasurementByIdAndPatient(measurementId,patient);
         if (dciMeasurementOptional.isPresent()){
             dciMeasurementRepository.delete(dciMeasurementOptional.get());
             return true;

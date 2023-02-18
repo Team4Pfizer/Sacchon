@@ -4,14 +4,15 @@ import gr.codehub.sacchon.dto.BgMeasurementDTO;
 import gr.codehub.sacchon.dto.ConsultationDTO;
 import gr.codehub.sacchon.dto.DciMeasurementDTO;
 import gr.codehub.sacchon.dto.PatientDTO;
+import gr.codehub.sacchon.exception.NotFoundException;
 import gr.codehub.sacchon.service.MediDataVaultService;
 import lombok.AllArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @AllArgsConstructor
@@ -20,7 +21,7 @@ public class MediDataVaultController {
     private MediDataVaultService mediDataVaultService;
 
     @GetMapping("/myaccount/{emailId}")
-    public PatientDTO viewAccount(@PathVariable("emailId") String patientEmailId){
+    public Map<String,Object> viewAccount(@PathVariable("emailId") String patientEmailId) throws NotFoundException {
         return mediDataVaultService.viewAccount(patientEmailId);
     }
 
@@ -30,38 +31,38 @@ public class MediDataVaultController {
     }
 
     @DeleteMapping("/delete/{emailId}")
-    public boolean removeAccount(@PathVariable("emailId") String patientEmailId){
+    public boolean removeAccount(@PathVariable("emailId") String patientEmailId) throws NotFoundException {
         return mediDataVaultService.removeAccount(patientEmailId);
     }
 
     @PostMapping("/bgmeasurement/{emailId}")
     public BgMeasurementDTO addBgMeasurement(@RequestBody BgMeasurementDTO bgMeasurementDTO,
-                                          @PathVariable("emailId") String patientEmailId){
+                                          @PathVariable("emailId") String patientEmailId) throws NotFoundException {
         return mediDataVaultService.addBgMeasurement(bgMeasurementDTO,patientEmailId);
     }
 
     @PostMapping("/dcimeasurement/{emailId}")
     public DciMeasurementDTO addDciMeasurement(@RequestBody DciMeasurementDTO dciMeasurementDTO,
-                                            @PathVariable("emailId") String patientEmailId){
+                                            @PathVariable("emailId") String patientEmailId) throws NotFoundException {
         return mediDataVaultService.addDciMeasurement(dciMeasurementDTO,patientEmailId);
     }
 
 
-    @GetMapping("/averageBgMeasurements/{emailId}")
+    @GetMapping("/averagebgmeasurements/{emailId}")
     public Double averageBgMeasurement(
             @PathVariable("emailId") String patientEmailId,
             @RequestParam("start") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate start,
-            @RequestParam("stop") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate stop){
+            @RequestParam("stop") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate stop) throws NotFoundException {
 
 
         return mediDataVaultService.averageBgMeasurement(start,stop,patientEmailId);
 
     }
-    @GetMapping("/averageDciMeasurements/{emailId}")
+    @GetMapping("/averagedcimeasurements/{emailId}")
     public Double averageDciMeasurement(
             @PathVariable("emailId") String patientEmailId,
             @RequestParam("start") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate start,
-            @RequestParam("stop") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate stop) {
+            @RequestParam("stop") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate stop) throws NotFoundException {
 
 
         return mediDataVaultService.averageDciMeasurement(start, stop, patientEmailId);
@@ -70,36 +71,34 @@ public class MediDataVaultController {
     }
 
     @GetMapping("/consultations/{emailId}")
-    public List<ConsultationDTO> getConsultations(@PathVariable(name="emailId") String patientEmailId){
+    public List<ConsultationDTO> getConsultations(@PathVariable(name="emailId") String patientEmailId) throws NotFoundException {
         return mediDataVaultService.getConsultations(patientEmailId);
     }
 
-    @PutMapping("/bgmeasurement/{emailId}")
+    @PutMapping("/bgmeasurement/{emailId}/{measurementId}")
     public BgMeasurementDTO updateBgMeasurement(@RequestBody BgMeasurementDTO bgMeasurementDTO,
-                                                @RequestParam(name="measurementDate") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate measurementDate,
-                                                @RequestParam(name="measurementTime") @DateTimeFormat(pattern = "HHmm") LocalTime measurementTime,
-                                                @PathVariable(name="emailId") String patientEmailId){
-        return  mediDataVaultService.updateBgMeasurement(bgMeasurementDTO, measurementDate,measurementTime,patientEmailId);
+                                                @PathVariable(name="measurementId")Long measurementId,
+                                                @PathVariable(name="emailId") String patientEmailId) throws NotFoundException {
+        return  mediDataVaultService.updateBgMeasurement(bgMeasurementDTO, measurementId,patientEmailId);
     }
 
-    @PutMapping("/dcimeasurement/{emailId}/{measurementDate}")
+    @PutMapping("/dcimeasurement/{emailId}/{measurementId}")
     public DciMeasurementDTO updateDciMeasurement(@RequestBody DciMeasurementDTO dciMeasurementDTO,
                                                   @PathVariable(name="emailId") String emailId,
-                                                  @PathVariable(name="measurementDate")@DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate measurementDate){
-        return  mediDataVaultService.updateDciMeasurement(dciMeasurementDTO, measurementDate, emailId);
+                                                  @PathVariable(name="measurementId")Long measurementId) throws NotFoundException {
+        return  mediDataVaultService.updateDciMeasurement(dciMeasurementDTO, measurementId, emailId);
     }
 
-    @DeleteMapping("/bgmeasurement/{emailId}")
+    @DeleteMapping("/bgmeasurement/{emailId}/{measurementId}")
     public boolean deleteBgMeasurement(@PathVariable(name="emailId") String emailId,
-                                       @RequestParam(name="measurementDate") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate measurementDate,
-                                       @RequestParam(name="measurementTime") @DateTimeFormat(pattern = "HHmm") LocalTime measurementTime){
+                                       @PathVariable(name="measurementId")Long measurementId) throws NotFoundException {
 
-        return  mediDataVaultService.deleteBgMeasurement(measurementDate,measurementTime,emailId);
+        return  mediDataVaultService.deleteBgMeasurement(measurementId,emailId);
     }
 
-    @DeleteMapping("/dcimeasurement/{emailId}/{measurementDate}")
+    @DeleteMapping("/dcimeasurement/{emailId}/{measurementId}")
     public boolean deleteDciMeasurement(@PathVariable(name="emailId") String emailId,
-                                        @PathVariable(name="measurementDate")@DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate measurementDate){
-        return  mediDataVaultService.deleteDciMeasurement(measurementDate, emailId);
+                                        @PathVariable(name="measurementId")Long measurementId) throws NotFoundException {
+        return  mediDataVaultService.deleteDciMeasurement(measurementId, emailId);
     }
 }

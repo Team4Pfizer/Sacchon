@@ -6,9 +6,9 @@ import lombok.*;
 
 import java.util.List;
 
-@Getter
-@Setter
+
 @Entity
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -23,11 +23,7 @@ public class Patient {
     private String patientFirstName ;
     private String patientLastName ;
 
-    @OneToMany(mappedBy = "patient")
-    private List<BgMeasurement> bgMeasurements;
 
-    @OneToMany(mappedBy = "patient")
-    private List<DciMeasurement> dciMeasurements;
 
     @OneToMany(mappedBy = "patient")
     private List<Consultation> consultations;

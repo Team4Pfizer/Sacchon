@@ -1,30 +1,31 @@
 package gr.codehub.sacchon.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import gr.codehub.sacchon.model.BgMeasurement;
 import gr.codehub.sacchon.model.Patient;
 import lombok.*;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 
 
 @Builder
-@Getter
-@Setter
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class BgMeasurementDTO {
+    private Long bgMeasurementId;
 
     private int bgMeasurementData;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate bgMeasurementDate;
 
-    @DateTimeFormat(pattern = "HHmm")
+    @JsonFormat(pattern = "HHmm")
     private LocalTime bgMeasurementTime;
 
     public BgMeasurementDTO(BgMeasurement bgMeasurement){
+        this.bgMeasurementId=bgMeasurement.getBgMeasurementId();
         this.bgMeasurementData=bgMeasurement.getBgMeasurementData();
         this.bgMeasurementDate=bgMeasurement.getBgMeasurementDate();
         this.bgMeasurementTime=bgMeasurement.getBgMeasurementTime();

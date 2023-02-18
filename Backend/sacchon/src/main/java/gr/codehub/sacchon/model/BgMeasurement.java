@@ -32,7 +32,7 @@ public class BgMeasurement {
 
     private LocalTime BgMeasurementTime;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="patient_Id", referencedColumnName = "patientId")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Patient patient;

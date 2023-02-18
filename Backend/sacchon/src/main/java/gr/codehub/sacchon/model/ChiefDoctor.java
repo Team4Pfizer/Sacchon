@@ -4,9 +4,9 @@ package gr.codehub.sacchon.model;
 import jakarta.persistence.*;
 import lombok.*;
 
-@Getter
-@Setter
+
 @Entity
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder

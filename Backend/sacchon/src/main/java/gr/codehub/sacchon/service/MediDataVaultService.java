@@ -4,37 +4,38 @@ import gr.codehub.sacchon.dto.BgMeasurementDTO;
 import gr.codehub.sacchon.dto.ConsultationDTO;
 import gr.codehub.sacchon.dto.DciMeasurementDTO;
 import gr.codehub.sacchon.dto.PatientDTO;
+import gr.codehub.sacchon.exception.NotFoundException;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.List;
+import java.util.Map;
 
 
 public interface MediDataVaultService {
 
 
-    PatientDTO viewAccount(String patientEmailId);
+    Map<String,Object> viewAccount(String patientEmailId) throws NotFoundException;
 
     PatientDTO signUp(PatientDTO patientDTO);
 
-    boolean removeAccount(String patientEmailId);
+    boolean removeAccount(String patientEmailId) throws NotFoundException ;
 
-    BgMeasurementDTO addBgMeasurement(BgMeasurementDTO bgMeasurementDTO, String patientEmailId) throws RuntimeException;
+    BgMeasurementDTO addBgMeasurement(BgMeasurementDTO bgMeasurementDTO, String patientEmailId) throws NotFoundException ;
 
-    DciMeasurementDTO addDciMeasurement(DciMeasurementDTO dciMeasurementDTO, String patientEmailId)throws RuntimeException;
+    DciMeasurementDTO addDciMeasurement(DciMeasurementDTO dciMeasurementDTO, String patientEmailId) throws NotFoundException ;
 
-    Double averageBgMeasurement(LocalDate start, LocalDate stop, String patientEmailId);
+    Double averageBgMeasurement(LocalDate start, LocalDate stop, String patientEmailId) throws NotFoundException ;
 
-    Double averageDciMeasurement(LocalDate start, LocalDate stop, String patientEmailId);
+    Double averageDciMeasurement(LocalDate start, LocalDate stop, String patientEmailId) throws NotFoundException ;
 
-    List<ConsultationDTO> getConsultations(String patientEmailId);
+    List<ConsultationDTO> getConsultations(String patientEmailId)throws NotFoundException ;
 
-    BgMeasurementDTO updateBgMeasurement(BgMeasurementDTO bgMeasurementDTO, LocalDate measurementDate, LocalTime measurementTime, String patientEmailId);
+    BgMeasurementDTO updateBgMeasurement(BgMeasurementDTO bgMeasurementDTO, Long measurementId, String patientEmailId)throws NotFoundException ;
 
-    DciMeasurementDTO updateDciMeasurement(DciMeasurementDTO dciMeasurementDTO, LocalDate measurementDate, String patientEmailId);
+    DciMeasurementDTO updateDciMeasurement(DciMeasurementDTO dciMeasurementDTO,Long measurementId, String patientEmailId)throws NotFoundException ;
 
-    boolean deleteBgMeasurement(LocalDate measurementDate,LocalTime measurementTime, String patientEmailId);
+    boolean deleteBgMeasurement(Long measurementId, String patientEmailId)throws NotFoundException ;
 
-    boolean deleteDciMeasurement(LocalDate measurementDate, String patientEmailId);
+    boolean deleteDciMeasurement(Long measurementId, String patientEmailId) throws NotFoundException;
 
 }
