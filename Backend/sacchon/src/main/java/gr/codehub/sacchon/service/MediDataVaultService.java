@@ -1,39 +1,42 @@
 package gr.codehub.sacchon.service;
 
 import gr.codehub.sacchon.dto.BgMeasurementDTO;
+import gr.codehub.sacchon.dto.ConsultationDTO;
 import gr.codehub.sacchon.dto.DciMeasurementDTO;
-import gr.codehub.sacchon.model.BgMeasurement;
-import gr.codehub.sacchon.model.Consultation;
-import gr.codehub.sacchon.model.DciMeasurement;
-import gr.codehub.sacchon.model.Patient;
+import gr.codehub.sacchon.dto.PatientDTO;
+import gr.codehub.sacchon.exception.BadRequestParamException;
+import gr.codehub.sacchon.exception.NotFoundException;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 
 public interface MediDataVaultService {
-    Patient viewAccount(Long patientId);
 
-    Patient signUp(Patient patient);
 
-    boolean removeAccount(Long patientId);
+    Map<String,Object> viewAccount(String patientEmailId) throws NotFoundException;
 
-    BgMeasurement addBgMeasurement(BgMeasurementDTO bgMeasurementDTO, Long patientId) throws RuntimeException;
+    PatientDTO signUp(PatientDTO patientDTO);
 
-    DciMeasurement addDciMeasurement(DciMeasurementDTO dciMeasurementDTO, Long patientId);
+    boolean removeAccount(String patientEmailId) throws NotFoundException ;
 
-    Double averageBgMeasurement(LocalDate start, LocalDate stop, Long patientId);
+    BgMeasurementDTO addBgMeasurement(BgMeasurementDTO bgMeasurementDTO, String patientEmailId) throws NotFoundException ;
 
-    Double averageDciMeasurement(LocalDate start, LocalDate stop, Long patientId);
+    DciMeasurementDTO addDciMeasurement(DciMeasurementDTO dciMeasurementDTO, String patientEmailId) throws NotFoundException ;
 
-    List<Consultation> getConsultations(Long patientId);
+    Double averageBgMeasurement(LocalDate start, LocalDate stop, String patientEmailId) throws NotFoundException, BadRequestParamException;
 
-    BgMeasurementDTO updateBgMeasurement(BgMeasurementDTO bgMeasurementDTO, Long patientId);
+    Double averageDciMeasurement(LocalDate start, LocalDate stop, String patientEmailId) throws NotFoundException,BadRequestParamException ;
 
-    DciMeasurementDTO updateDciMeasurement(DciMeasurementDTO dciMeasurementDTO, Long patientId);
+    List<ConsultationDTO> getConsultations(String patientEmailId)throws NotFoundException ;
 
-    boolean deleteBgMeasurement(Long bgMeasurementId);
+    BgMeasurementDTO updateBgMeasurement(BgMeasurementDTO bgMeasurementDTO, Long measurementId, String patientEmailId)throws NotFoundException ;
 
-    boolean deleteDciMeasurement(Long dciMeasurementId);
+    DciMeasurementDTO updateDciMeasurement(DciMeasurementDTO dciMeasurementDTO,Long measurementId, String patientEmailId)throws NotFoundException ;
+
+    boolean deleteBgMeasurement(Long measurementId, String patientEmailId)throws NotFoundException ;
+
+    boolean deleteDciMeasurement(Long measurementId, String patientEmailId) throws NotFoundException;
 
 }

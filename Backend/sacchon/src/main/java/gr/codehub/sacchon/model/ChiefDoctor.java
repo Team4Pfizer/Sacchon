@@ -1,38 +1,27 @@
 package gr.codehub.sacchon.model;
 
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.persistence.*;
+import lombok.*;
 
-@Getter
-@Setter
+
 @Entity
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Table(name = "CHIEF_DOCTORS")
 public class ChiefDoctor {
 
     @Id
-    private Long id;
-    private String name;
-    private String surname;
-    private String username;
-    private String password;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long chiefDoctorId;
+    @Column(unique = true)
+    private String chiefDoctorEmailId;
+    private String chiefDoctorFirstName;
+    private String chiefDoctorLastName;
 
 
-    @Override
-    public String toString() {
-        return "ChiefDoctor{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", surname='" + surname + '\'' +
-                ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                '}';
-    }
+
+
 }

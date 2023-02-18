@@ -2,54 +2,33 @@ package gr.codehub.sacchon.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Builder;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.LocalDate;
-import java.util.Objects;
 
 @Entity
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @Table(name = "DCI_MEASUREMENTS")
 public class DciMeasurement {
 
     @Id
     @GeneratedValue( strategy = GenerationType.IDENTITY)
-    private Long measurementId;
+    private Long dciMeasurementId;
 
-    private double dciMeasurementData;
+    private int dciMeasurementData;
     private LocalDate dciMeasurementDate;
 
-    @ManyToOne (fetch = FetchType.LAZY)
-    @JoinColumn(name = "patient_id")
+    @ManyToOne
+    @JoinColumn(name="patient_Id", referencedColumnName = "patientId")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Patient patient;
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
 
-        DciMeasurement that = (DciMeasurement) o;
-
-        return Objects.equals(measurementId, that.measurementId);
-    }
-
-    @Override
-    public int hashCode() {
-        return measurementId != null ? measurementId.hashCode() : 0;
-    }
-
-    @Override
-    public String toString() {
-        return "DciMeasurement{" +
-                "measurementId=" + measurementId +
-                ", dciMeasurementData=" + dciMeasurementData +
-                ", dciMeasurementDate=" + dciMeasurementDate +
-                ", patient=" + patient +
-                '}';
-    }
 }
