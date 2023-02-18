@@ -1,37 +1,36 @@
 package gr.codehub.sacchon.service;
 
 import gr.codehub.sacchon.dto.BgMeasurementDTO;
+import gr.codehub.sacchon.dto.ConsultationDTO;
 import gr.codehub.sacchon.dto.DciMeasurementDTO;
 import gr.codehub.sacchon.dto.PatientDTO;
-import gr.codehub.sacchon.model.BgMeasurement;
-import gr.codehub.sacchon.model.Consultation;
-import gr.codehub.sacchon.model.DciMeasurement;
-import gr.codehub.sacchon.model.Patient;
 
 import java.time.LocalDate;
 import java.util.List;
 
 
 public interface MediDataVaultService {
-    Patient viewAccount(Long patientId);
 
-    Patient signUp(PatientDTO patientDTO);
 
-    boolean removeAccount(Long patientId);
+    PatientDTO viewAccount(String patientEmailId);
 
-    BgMeasurement addBgMeasurement(BgMeasurementDTO bgMeasurementDTO, Long patientId) throws RuntimeException;
+    PatientDTO signUp(PatientDTO patientDTO);
 
-    DciMeasurement addDciMeasurement(DciMeasurementDTO dciMeasurementDTO, Long patientId);
+    boolean removeAccount(String patientEmailId);
 
-    Double averageBgMeasurement(LocalDate start, LocalDate stop, Long patientId);
+    BgMeasurementDTO addBgMeasurement(BgMeasurementDTO bgMeasurementDTO, String patientEmailId) throws RuntimeException;
 
-    Double averageDciMeasurement(LocalDate start, LocalDate stop, Long patientId);
+    DciMeasurementDTO addDciMeasurement(DciMeasurementDTO dciMeasurementDTO, String patientEmailId)throws RuntimeException;
 
-    List<Consultation> getConsultations(Long patientId);
+    Double averageBgMeasurement(LocalDate start, LocalDate stop, String patientEmailId);
 
-    BgMeasurementDTO updateBgMeasurement(BgMeasurementDTO bgMeasurementDTO, Long patientId);
+    Double averageDciMeasurement(LocalDate start, LocalDate stop, String patientEmailId);
 
-    DciMeasurementDTO updateDciMeasurement(DciMeasurementDTO dciMeasurementDTO, Long patientId);
+    List<ConsultationDTO> getConsultations(String patientEmailId);
+
+    BgMeasurementDTO updateBgMeasurement(BgMeasurementDTO bgMeasurementDTO, LocalDate measurementDate,String patientEmailId);
+
+    DciMeasurementDTO updateDciMeasurement(DciMeasurementDTO dciMeasurementDTO, LocalDate measurementDate, String patientEmailId);
 
     boolean deleteBgMeasurement(Long bgMeasurementId);
 

@@ -4,10 +4,7 @@ package gr.codehub.sacchon.model;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.List;
 
 @Getter
 @Setter
@@ -21,31 +18,25 @@ public class Patient {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long patientId ;
+    @Column(unique = true)
+    private String patientEmailId ;
+    private String patientFirstName ;
+    private String patientLastName ;
 
-    private String firstName ;
-    private String lastName ;
+    @OneToMany(mappedBy = "patient")
+    private List<BgMeasurement> bgMeasurements;
 
+    @OneToMany(mappedBy = "patient")
+    private List<DciMeasurement> dciMeasurements;
 
-    private String userEmail ;
-//    private String userPassword ;
-//    // has to be hashed in the db
-//
-//    private LocalDate registrationDate;
-//
-//    private int userAge ;
-//
-//    private boolean hasConsultant; // if the patient has or has no consultant
-
-    //---
-
+    @OneToMany(mappedBy = "patient")
+    private List<Consultation> consultations;
     @ManyToOne
-    @JoinColumn(
-            name = "doctor_Id",
-            referencedColumnName = "doctorId"
+    @JoinColumn(name = "doctor_id", referencedColumnName = "doctorId")
+    private Doctor patientsDoctor;
 
-    )// many patients can have one doctor
 
-    private Doctor doctor; // the patient's doctor
+
 
 
 }

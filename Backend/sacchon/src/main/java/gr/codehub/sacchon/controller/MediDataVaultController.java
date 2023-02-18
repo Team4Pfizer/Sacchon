@@ -1,12 +1,10 @@
 package gr.codehub.sacchon.controller;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import gr.codehub.sacchon.dto.BgMeasurementDTO;
+import gr.codehub.sacchon.dto.ConsultationDTO;
 import gr.codehub.sacchon.dto.DciMeasurementDTO;
 import gr.codehub.sacchon.dto.PatientDTO;
-import gr.codehub.sacchon.model.BgMeasurement;
-import gr.codehub.sacchon.model.Consultation;
-import gr.codehub.sacchon.model.DciMeasurement;
-import gr.codehub.sacchon.model.Patient;
 import gr.codehub.sacchon.service.MediDataVaultService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -20,54 +18,73 @@ public class MediDataVaultController {
 
     private MediDataVaultService mediDataVaultService;
 
-    @GetMapping("/Patient/{id}")
-    public Patient viewAccount(@PathVariable(name="id") long id){
-       return  mediDataVaultService.viewAccount(id);
+    @GetMapping("/myaccount/{emailId}")
+    public PatientDTO viewAccount(@PathVariable("emailId") String patientEmailId){
+        return mediDataVaultService.viewAccount(patientEmailId);
     }
 
-    @PostMapping("/Patient")
-    public Patient signUp(@RequestBody PatientDTO patientDTO){
-        return  mediDataVaultService.signUp(patientDTO);
+    @PostMapping("/signup")
+    public PatientDTO signUp (@RequestBody PatientDTO patientDTO){
+        return mediDataVaultService.signUp(patientDTO);
     }
 
-    @DeleteMapping("/Patient/{id}")
-    public boolean removeAccount(@PathVariable(name="id") long id){
-        return  mediDataVaultService.removeAccount(id);
+    @DeleteMapping("/delete/{emailId}")
+    public boolean removeAccount(@PathVariable("emailId") String patientEmailId){
+        return mediDataVaultService.removeAccount(patientEmailId);
     }
 
-    @PostMapping("/Patient/{id}/bgMeasurement")
-    public BgMeasurement addBgMeasurement(@RequestBody BgMeasurementDTO bgMeasurementDTO, @PathVariable(name="id") long id){
-        return  mediDataVaultService.addBgMeasurement(bgMeasurementDTO, id);
+    @PostMapping("/bgmeasurement/{emailId}")
+    public BgMeasurementDTO addBgMeasurement(@RequestBody BgMeasurementDTO bgMeasurementDTO,
+                                          @PathVariable("emailId") String patientEmailId){
+        return mediDataVaultService.addBgMeasurement(bgMeasurementDTO,patientEmailId);
     }
 
-    @PostMapping("/Patient/{id}/dciMeasurement")
-    public DciMeasurement addDciMeasurement(@RequestBody DciMeasurementDTO dciMeasurementDTO, @PathVariable(name="id") long id){
-        return  mediDataVaultService.addDciMeasurement(dciMeasurementDTO, id);
+    @PostMapping("/dcimeasurement/{emailId}")
+    public DciMeasurementDTO addDciMeasurement(@RequestBody DciMeasurementDTO dciMeasurementDTO,
+                                            @PathVariable("emailId") String patientEmailId){
+        return mediDataVaultService.addDciMeasurement(dciMeasurementDTO,patientEmailId);
     }
 
-    @GetMapping("/Patient/{id}/bgMeasurement/average")
-    public Double averageBgMeasurement(@RequestParam(name="start") LocalDate start, @RequestParam(name="stop") LocalDate stop, @PathVariable(name="id") long id){
-        return  mediDataVaultService.averageBgMeasurement(start, stop, id);
+
+    @GetMapping("/averageBgMeasurements/{emailId}")
+    public Double averageBgMeasurement(
+            @PathVariable("emailId") String patientEmailId,
+            @RequestParam("start") @JsonFormat(pattern = "yyyy-MM-dd") LocalDate start,
+            @RequestParam("stop") @JsonFormat(pattern = "yyyy-MM-dd") LocalDate stop){
+
+
+        return mediDataVaultService.averageBgMeasurement(start,stop,patientEmailId);
+
+    }
+    @GetMapping("/averageDciMeasurements/{emailId}")
+    public Double averageDciMeasurement(
+            @PathVariable("emailId") String patientEmailId,
+            @RequestParam("start") @JsonFormat(pattern = "yyyy-MM-dd") LocalDate start,
+            @RequestParam("stop") @JsonFormat(pattern = "yyyy-MM-dd") LocalDate stop) {
+
+
+        return mediDataVaultService.averageDciMeasurement(start, stop, patientEmailId);
+
+
     }
 
-    @GetMapping("/Patient/{id}/dciMeasurement/average")
-    public Double averageDciMeasurement(@RequestParam(name="start") LocalDate start, @RequestParam(name="stop") LocalDate stop, @PathVariable(name="id") long id){
-        return  mediDataVaultService.averageDciMeasurement(start, stop, id);
+    @GetMapping("/consultations/{emailId}")
+    public List<ConsultationDTO> getConsultations(@PathVariable(name="emailId") String patientEmailId){
+        return mediDataVaultService.getConsultations(patientEmailId);
     }
 
-    @GetMapping("/Patient/{id}/consultations")
-    public List<Consultation> getConsultations(@PathVariable(name="id") long id){
-        return  mediDataVaultService.getConsultations(id);
+    @PutMapping("/bgmeasurement/{emailId}/{measurementDate}")
+    public BgMeasurementDTO updateBgMeasurement(@RequestBody BgMeasurementDTO bgMeasurementDTO,
+                                                @PathVariable(name="measurementDate") @JsonFormat(pattern = "yyyy-MM-dd") LocalDate measurementDate,
+                                                @PathVariable(name="emailId") String patientEmailId){
+        return  mediDataVaultService.updateBgMeasurement(bgMeasurementDTO, measurementDate,patientEmailId);
     }
 
-    @PutMapping("/Patient/{id}/bgMeasurement")
-    public BgMeasurementDTO updateBgMeasurement(@RequestBody BgMeasurementDTO bgMeasurementDTO, @PathVariable(name="id") long id){
-        return  mediDataVaultService.updateBgMeasurement(bgMeasurementDTO, id);
-    }
-
-    @PutMapping("/Patient/{id}/dciMeasurement")
-    public DciMeasurementDTO updateDciMeasurement(@RequestBody DciMeasurementDTO dciMeasurementDTO, @PathVariable(name="id") long id){
-        return  mediDataVaultService.updateDciMeasurement(dciMeasurementDTO, id);
+    @PutMapping("/dcimeasurement/{emailId}/{measurementDate}")
+    public DciMeasurementDTO updateDciMeasurement(@RequestBody DciMeasurementDTO dciMeasurementDTO,
+                                                  @PathVariable(name="emailId") String emailId,
+                                                  @PathVariable(name="measurementDate")@JsonFormat(pattern = "yyyy-MM-dd") LocalDate measurementDate){
+        return  mediDataVaultService.updateDciMeasurement(dciMeasurementDTO, measurementDate, emailId);
     }
 
     @DeleteMapping("/Patient/{id}/bgMeasurement/{bgMeasurementId}")

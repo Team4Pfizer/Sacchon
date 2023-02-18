@@ -3,7 +3,6 @@ package gr.codehub.sacchon.model;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.Objects;
 import java.util.Set;
 
 @Getter
@@ -18,10 +17,11 @@ public class Doctor {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long doctorId ;
-    private String userEmail ;
-//    private String userPassword;
-    private String firstName;
-    private String lastName;
+    @Column(unique = true)
+    private String doctorEmailId ;
+
+    private String doctorFirstName;
+    private String doctorLastName;
 
 
     @OneToMany(mappedBy = "doctor")
@@ -30,7 +30,6 @@ public class Doctor {
 
 
 
-//    private Set<Consultation> consultations;
 
 
 
