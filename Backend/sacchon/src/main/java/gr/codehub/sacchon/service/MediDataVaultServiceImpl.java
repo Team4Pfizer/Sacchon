@@ -16,6 +16,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -54,12 +55,13 @@ public class MediDataVaultServiceImpl implements MediDataVaultService {
 
     @Override
     public boolean removeAccount(String patientEmailId) {
-        if (patientRepository.findByPatientEmailIdIgnoreCase(patientEmailId).isPresent()){
-            patientRepository.deleteByPatientEmailId(patientEmailId);
+        try {
+            Patient patient = getPatient(patientEmailId);
+            patientRepository.delete(patient);
             return true;
-        }else
+        }catch (RuntimeException e) {
             return false;
-
+        }
     }
 
     @Override
@@ -111,44 +113,68 @@ public class MediDataVaultServiceImpl implements MediDataVaultService {
     }
 
     @Override
-    public BgMeasurementDTO updateBgMeasurement(BgMeasurementDTO bgMeasurementDTO, LocalDate measurementDate, String patientEmailId) {
+    public BgMeasurementDTO updateBgMeasurement(BgMeasurementDTO bgMeasurementDTO, LocalDate measurementDate, LocalTime measurementTime, String patientEmailId) throws RuntimeException{
         Patient patient = getPatient(patientEmailId);
-        BgMeasurement bgMeasurement = bgMeasurementRepository.findBgMeasurementByDateAndPatient(measurementDate,patient);
-        if (Objects.nonNull(bgMeasurementDTO.getBgMeasurementDate())){
-            bgMeasurement.setBgMeasurementDate(bgMeasurementDTO.getBgMeasurementDate());
-        }
-        if (Objects.nonNull(bgMeasurementDTO.getBgMeasurementTime())){
-            bgMeasurement.setBgMeasurementTime(bgMeasurementDTO.getBgMeasurementTime());
-        }
-        if (bgMeasurementDTO.getBgMeasurementData()!=0){
-            bgMeasurement.setBgMeasurementData(bgMeasurementDTO.getBgMeasurementData());
-        }
-        return new BgMeasurementDTO(bgMeasurementRepository.save(bgMeasurement));
+        Optional<BgMeasurement> bgMeasurementOptional = bgMeasurementRepository.findBgMeasurementByDateByTimeAndPatient(measurementDate,measurementTime,patient);
+        if (bgMeasurementOptional.isPresent()) {
+            BgMeasurement bgMeasurement = bgMeasurementOptional.get();
 
+            if (Objects.nonNull(bgMeasurementDTO.getBgMeasurementDate())) {
+                bgMeasurement.setBgMeasurementDate(bgMeasurementDTO.getBgMeasurementDate());
+            }
+            if (Objects.nonNull(bgMeasurementDTO.getBgMeasurementTime())) {
+                bgMeasurement.setBgMeasurementTime(bgMeasurementDTO.getBgMeasurementTime());
+            }
+            if (bgMeasurementDTO.getBgMeasurementData() != 0) {
+                bgMeasurement.setBgMeasurementData(bgMeasurementDTO.getBgMeasurementData());
+            }
+            return new BgMeasurementDTO(bgMeasurementRepository.save(bgMeasurement));
+        }else
+            throw new RuntimeException("No Blood glucose level measurement with this ID: " + patientEmailId+ " and this Date: "+measurementDate);
     }
 
     @Override
     public DciMeasurementDTO updateDciMeasurement(DciMeasurementDTO dciMeasurementDTO, LocalDate measurementDate, String patientEmailId) {
         Patient patient = getPatient(patientEmailId);
-        DciMeasurement dciMeasurement = dciMeasurementRepository.findBgMeasurementByDateAndPatient(measurementDate,patient);
-        if (Objects.nonNull(dciMeasurementDTO.getDciMeasurementDate())){
-            dciMeasurement.setDciMeasurementDate(dciMeasurementDTO.getDciMeasurementDate());
+        Optional<DciMeasurement> dciMeasurementOptional = dciMeasurementRepository.findBgMeasurementByDateAndPatient(measurementDate,patient);
+        if (dciMeasurementOptional.isPresent()) {
+            DciMeasurement dciMeasurement = dciMeasurementOptional.get();
+            if (Objects.nonNull(dciMeasurementDTO.getDciMeasurementDate())) {
+                dciMeasurement.setDciMeasurementDate(dciMeasurementDTO.getDciMeasurementDate());
+            }
+            if (dciMeasurementDTO.getDciMeasurementData() != 0) {
+                dciMeasurement.setDciMeasurementData(dciMeasurementDTO.getDciMeasurementData());
+            }
+            return new DciMeasurementDTO(dciMeasurementRepository.save(dciMeasurement));
+        }else {
+            throw new RuntimeException("No Daily Carb measurement with this ID: " + patientEmailId+ " and this Date: "+measurementDate);
         }
-        if (dciMeasurementDTO.getDciMeasurementData()!=0){
-            dciMeasurement.setDciMeasurementData(dciMeasurementDTO.getDciMeasurementData());
-        }
-        return new DciMeasurementDTO(dciMeasurementRepository.save(dciMeasurement));
-
-
     }
 
     @Override
-    public boolean deleteBgMeasurement(Long bgMeasurementId) {
-        return false;
+    public boolean deleteBgMeasurement(LocalDate measurementDate,LocalTime measurementTime, String patientEmailId) {
+        Patient patient = getPatient(patientEmailId);
+        Optional<BgMeasurement> bgMeasurementOptional = bgMeasurementRepository.findBgMeasurementByDateByTimeAndPatient(measurementDate, measurementTime, patient);
+
+        if (bgMeasurementOptional.isPresent()) {
+            bgMeasurementRepository.delete(bgMeasurementOptional.get());
+            return true;
+
+        }else{
+            return false;
+        }
     }
 
     @Override
-    public boolean deleteDciMeasurement(Long dciMeasurementId) {
-        return false;
+    public boolean deleteDciMeasurement(LocalDate measurementDate, String patientEmailId) {
+        Patient patient = getPatient(patientEmailId);
+        Optional<DciMeasurement> dciMeasurementOptional = dciMeasurementRepository.findBgMeasurementByDateAndPatient(measurementDate,patient);
+        if (dciMeasurementOptional.isPresent()){
+            dciMeasurementRepository.delete(dciMeasurementOptional.get());
+            return true;
+        }else {
+            return false;
+        }
+
     }
 }

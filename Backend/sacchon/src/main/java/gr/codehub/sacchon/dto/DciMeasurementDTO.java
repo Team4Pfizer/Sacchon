@@ -1,9 +1,9 @@
 package gr.codehub.sacchon.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import gr.codehub.sacchon.model.DciMeasurement;
 import gr.codehub.sacchon.model.Patient;
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 
@@ -17,7 +17,7 @@ public class DciMeasurementDTO {
 
     private int dciMeasurementData;
 
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate dciMeasurementDate;
 
     public DciMeasurementDTO(DciMeasurement dciMeasurement){

@@ -14,14 +14,12 @@ public class PatientDTO {
     private String patientLastName ;
     private String patientEmailId ;
 
-    private String patientsDoctorEmail=null;
 
 
     public PatientDTO(Patient patient){
         this.patientEmailId=patient.getPatientEmailId();
         this.patientFirstName=patient.getPatientFirstName();
         this.patientLastName=patient.getPatientLastName();
-        this.patientsDoctorEmail=patient.getPatientEmailId();
 
     }
 
@@ -31,7 +29,6 @@ public class PatientDTO {
                 .patientEmailId(this.patientEmailId)
                 .patientFirstName(this.patientFirstName)
                 .patientLastName(this.patientLastName)
-                .patientsDoctor(null)
                 .build();
 
     }

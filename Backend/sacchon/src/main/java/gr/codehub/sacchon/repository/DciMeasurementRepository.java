@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 public interface DciMeasurementRepository extends JpaRepository<DciMeasurement,Long> {
 
@@ -15,7 +16,7 @@ public interface DciMeasurementRepository extends JpaRepository<DciMeasurement,L
 
 
     @Query(value = "select dci from DciMeasurement dci  where dci.dciMeasurementDate=:measurementDate and dci.patient=:patient")
-    DciMeasurement findBgMeasurementByDateAndPatient(LocalDate measurementDate, Patient patient);
+    Optional<DciMeasurement> findBgMeasurementByDateAndPatient(LocalDate measurementDate, Patient patient);
 
 
 }

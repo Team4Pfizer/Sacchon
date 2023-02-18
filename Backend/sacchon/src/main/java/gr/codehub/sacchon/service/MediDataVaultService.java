@@ -6,6 +6,7 @@ import gr.codehub.sacchon.dto.DciMeasurementDTO;
 import gr.codehub.sacchon.dto.PatientDTO;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 
@@ -28,12 +29,12 @@ public interface MediDataVaultService {
 
     List<ConsultationDTO> getConsultations(String patientEmailId);
 
-    BgMeasurementDTO updateBgMeasurement(BgMeasurementDTO bgMeasurementDTO, LocalDate measurementDate,String patientEmailId);
+    BgMeasurementDTO updateBgMeasurement(BgMeasurementDTO bgMeasurementDTO, LocalDate measurementDate, LocalTime measurementTime, String patientEmailId);
 
     DciMeasurementDTO updateDciMeasurement(DciMeasurementDTO dciMeasurementDTO, LocalDate measurementDate, String patientEmailId);
 
-    boolean deleteBgMeasurement(Long bgMeasurementId);
+    boolean deleteBgMeasurement(LocalDate measurementDate,LocalTime measurementTime, String patientEmailId);
 
-    boolean deleteDciMeasurement(Long dciMeasurementId);
+    boolean deleteDciMeasurement(LocalDate measurementDate, String patientEmailId);
 
 }

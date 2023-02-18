@@ -9,5 +9,5 @@ public interface PatientRepository extends JpaRepository<Patient,Long> {
 
     Optional<Patient> findByPatientEmailIdIgnoreCase(String patientEmailId);
 
-    void deleteByPatientEmailId(String patientEmailId);
+
 }

@@ -6,7 +6,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
+import java.util.Optional;
 
 public interface BgMeasurementRepository extends JpaRepository<BgMeasurement,Long> {
 
@@ -14,6 +16,6 @@ public interface BgMeasurementRepository extends JpaRepository<BgMeasurement,Lon
     List<BgMeasurement> findBgMeasurementByBgMeasurementDateIsBetweenAndPatient(LocalDate start,LocalDate stop,Patient patient);
 
 
-    @Query(value = "select bgm from BgMeasurement bgm  where bgm.BgMeasurementDate=:measurementDate and bgm.patient=:patient")
-    BgMeasurement findBgMeasurementByDateAndPatient(LocalDate measurementDate,Patient patient);
+    @Query(value = "select bgm from BgMeasurement bgm  where bgm.BgMeasurementDate=:measurementDate and bgm.BgMeasurementTime=:measurementTime and bgm.patient=:patient")
+    Optional<BgMeasurement> findBgMeasurementByDateByTimeAndPatient(LocalDate measurementDate, LocalTime measurementTime, Patient patient);
 }
