@@ -24,7 +24,7 @@ public class Doctor {
     private String doctorLastName;
 
 
-    @OneToMany(mappedBy = "doctor")
+    @OneToMany(mappedBy = "patientsDoctor")
 
     private Set<Patient> patients;
 
