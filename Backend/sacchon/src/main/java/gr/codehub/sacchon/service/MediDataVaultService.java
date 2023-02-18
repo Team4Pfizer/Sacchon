@@ -4,6 +4,7 @@ import gr.codehub.sacchon.dto.BgMeasurementDTO;
 import gr.codehub.sacchon.dto.ConsultationDTO;
 import gr.codehub.sacchon.dto.DciMeasurementDTO;
 import gr.codehub.sacchon.dto.PatientDTO;
+import gr.codehub.sacchon.exception.BadRequestParamException;
 import gr.codehub.sacchon.exception.NotFoundException;
 
 import java.time.LocalDate;
@@ -24,9 +25,9 @@ public interface MediDataVaultService {
 
     DciMeasurementDTO addDciMeasurement(DciMeasurementDTO dciMeasurementDTO, String patientEmailId) throws NotFoundException ;
 
-    Double averageBgMeasurement(LocalDate start, LocalDate stop, String patientEmailId) throws NotFoundException ;
+    Double averageBgMeasurement(LocalDate start, LocalDate stop, String patientEmailId) throws NotFoundException, BadRequestParamException;
 
-    Double averageDciMeasurement(LocalDate start, LocalDate stop, String patientEmailId) throws NotFoundException ;
+    Double averageDciMeasurement(LocalDate start, LocalDate stop, String patientEmailId) throws NotFoundException,BadRequestParamException ;
 
     List<ConsultationDTO> getConsultations(String patientEmailId)throws NotFoundException ;
 

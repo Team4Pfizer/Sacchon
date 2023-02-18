@@ -4,6 +4,7 @@ import gr.codehub.sacchon.dto.BgMeasurementDTO;
 import gr.codehub.sacchon.dto.ConsultationDTO;
 import gr.codehub.sacchon.dto.DciMeasurementDTO;
 import gr.codehub.sacchon.dto.PatientDTO;
+import gr.codehub.sacchon.exception.BadRequestParamException;
 import gr.codehub.sacchon.exception.NotFoundException;
 import gr.codehub.sacchon.model.BgMeasurement;
 import gr.codehub.sacchon.model.Consultation;
@@ -93,26 +94,35 @@ public class MediDataVaultServiceImpl implements MediDataVaultService {
     }
 
     @Override
-    public Double averageBgMeasurement(LocalDate start, LocalDate stop, String patientEmailId) throws NotFoundException{
-        List<BgMeasurement> bgMeasurementList = bgMeasurementRepository
-                .findBgMeasurementByBgMeasurementDateIsBetweenAndPatient(start,stop,getPatient(patientEmailId));
-        return bgMeasurementList.stream()
-                .map(BgMeasurement::getBgMeasurementData)
-                .mapToDouble(x->x)
-                .sum()/bgMeasurementList.size();
-
+    public Double averageBgMeasurement(LocalDate start, LocalDate stop, String patientEmailId)
+            throws NotFoundException ,BadRequestParamException{
+        if (stop.isAfter(start)) {
+            List<BgMeasurement> bgMeasurementList = bgMeasurementRepository
+                    .findBgMeasurementByBgMeasurementDateIsBetweenAndPatient(start, stop, getPatient(patientEmailId));
+            return bgMeasurementList.stream()
+                    .map(BgMeasurement::getBgMeasurementData)
+                    .mapToDouble(x -> x)
+                    .sum() / bgMeasurementList.size();
+        }else {
+            throw new BadRequestParamException("The start date : "+start+" must be before end date : "+stop);
+        }
 
     }
 
     @Override
-    public Double averageDciMeasurement(LocalDate start, LocalDate stop, String patientEmailId) throws NotFoundException{
-        List<DciMeasurement> dciMeasurementList =dciMeasurementRepository
-                .findDciMeasurementByDciMeasurementDateIsBetweenAndPatient(start,stop,getPatient(patientEmailId));
+    public Double averageDciMeasurement(LocalDate start, LocalDate stop, String patientEmailId)
+            throws NotFoundException , BadRequestParamException {
+        if (stop.isAfter(start)) {
+            List<DciMeasurement> dciMeasurementList = dciMeasurementRepository
+                    .findDciMeasurementByDciMeasurementDateIsBetweenAndPatient(start, stop, getPatient(patientEmailId));
 
-        return dciMeasurementList.stream()
-                .map(DciMeasurement::getDciMeasurementData)
-                .mapToDouble(x->x)
-                .sum()/dciMeasurementList.size();
+            return dciMeasurementList.stream()
+                    .map(DciMeasurement::getDciMeasurementData)
+                    .mapToDouble(x -> x)
+                    .sum() / dciMeasurementList.size();
+        }else {
+            throw new BadRequestParamException("The start date : "+start+" must be before end date : "+stop);
+        }
     }
 
     @Override
