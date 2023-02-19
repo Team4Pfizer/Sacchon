@@ -2,9 +2,10 @@ package gr.codehub.sacchon.model;
 
 
 import jakarta.persistence.*;
-import lombok.*;
-
-import java.util.List;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 
 @Entity
@@ -24,9 +25,6 @@ public class Patient {
     private String patientLastName ;
 
 
-
-    @OneToMany(mappedBy = "patient")
-    private List<Consultation> consultations;
     @ManyToOne
     @JoinColumn(name = "doctor_id", referencedColumnName = "doctorId")
     private Doctor patientsDoctor;

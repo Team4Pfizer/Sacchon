@@ -2,11 +2,13 @@ package gr.codehub.sacchon.controller;
 
 
 import gr.codehub.sacchon.dto.DoctorDTO;
+import gr.codehub.sacchon.dto.PatientViewAccountDTO;
 import gr.codehub.sacchon.exception.NotFoundException;
 import gr.codehub.sacchon.service.DoctorAdviceService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -17,13 +19,23 @@ public class DoctorAdviceController {
     private final DoctorAdviceService doctorAdviceService;
 
     @GetMapping("/myaccount/{emailId}")
-    public Map<String,Object> viewAccount(@PathVariable("emailId") String doctorEmailId) throws NotFoundException {
+    public Map<String, Object> viewAccount(@PathVariable("emailId") String doctorEmailId) throws NotFoundException {
         return doctorAdviceService.viewAccount(doctorEmailId);
     }
 
     @PostMapping("/signup")
-    public DoctorDTO signUp (@RequestBody DoctorDTO doctorDTO){
+    public DoctorDTO signUp(@RequestBody DoctorDTO doctorDTO) {
         return doctorAdviceService.signUp(doctorDTO);
+    }
+
+    @DeleteMapping("delete/{emailId}")
+    public void removeAccount(@PathVariable("emailId") String doctorEmailId) throws NotFoundException {
+        doctorAdviceService.removeAccount(doctorEmailId);
+    }
+
+    @GetMapping("/availablepatients/{emailId}")
+    public List<PatientViewAccountDTO> availablePatients (@PathVariable("emailId") String doctorEmailId)throws NotFoundException{
+        return doctorAdviceService.availablePatients(doctorEmailId);
     }
 
 

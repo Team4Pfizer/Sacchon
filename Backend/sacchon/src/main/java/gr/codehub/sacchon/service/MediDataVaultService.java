@@ -1,25 +1,21 @@
 package gr.codehub.sacchon.service;
 
-import gr.codehub.sacchon.dto.BgMeasurementDTO;
-import gr.codehub.sacchon.dto.ConsultationDTO;
-import gr.codehub.sacchon.dto.DciMeasurementDTO;
-import gr.codehub.sacchon.dto.PatientDTO;
+import gr.codehub.sacchon.dto.*;
 import gr.codehub.sacchon.exception.BadRequestParamException;
 import gr.codehub.sacchon.exception.NotFoundException;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Map;
 
 
 public interface MediDataVaultService {
 
 
-    Map<String,Object> viewAccount(String patientEmailId) throws NotFoundException;
+    PatientViewAccountDTO viewAccount(String patientEmailId) throws NotFoundException;
 
     PatientDTO signUp(PatientDTO patientDTO);
 
-    boolean removeAccount(String patientEmailId) throws NotFoundException ;
+    void removeAccount(String patientEmailId) throws NotFoundException ;
 
     BgMeasurementDTO addBgMeasurement(BgMeasurementDTO bgMeasurementDTO, String patientEmailId) throws NotFoundException ;
 

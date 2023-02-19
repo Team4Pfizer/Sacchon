@@ -1,9 +1,6 @@
 package gr.codehub.sacchon.controller;
 
-import gr.codehub.sacchon.dto.BgMeasurementDTO;
-import gr.codehub.sacchon.dto.ConsultationDTO;
-import gr.codehub.sacchon.dto.DciMeasurementDTO;
-import gr.codehub.sacchon.dto.PatientDTO;
+import gr.codehub.sacchon.dto.*;
 import gr.codehub.sacchon.exception.BadRequestParamException;
 import gr.codehub.sacchon.exception.NotFoundException;
 import gr.codehub.sacchon.service.MediDataVaultService;
@@ -13,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @AllArgsConstructor
@@ -23,7 +19,7 @@ public class MediDataVaultController {
     private MediDataVaultService mediDataVaultService;
 
     @GetMapping("/myaccount/{emailId}")
-    public Map<String,Object> viewAccount(@PathVariable("emailId") String patientEmailId) throws NotFoundException {
+    public PatientViewAccountDTO viewAccount(@PathVariable("emailId") String patientEmailId) throws NotFoundException {
         return mediDataVaultService.viewAccount(patientEmailId);
     }
 
@@ -33,8 +29,8 @@ public class MediDataVaultController {
     }
 
     @DeleteMapping("/delete/{emailId}")
-    public boolean removeAccount(@PathVariable("emailId") String patientEmailId) throws NotFoundException {
-        return mediDataVaultService.removeAccount(patientEmailId);
+    public void removeAccount(@PathVariable("emailId") String patientEmailId) throws NotFoundException {
+        mediDataVaultService.removeAccount(patientEmailId);
     }
 
     @PostMapping("/bgmeasurement/{emailId}")

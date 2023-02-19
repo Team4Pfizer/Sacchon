@@ -1,9 +1,6 @@
 package gr.codehub.sacchon.service;
 
-import gr.codehub.sacchon.dto.BgMeasurementDTO;
-import gr.codehub.sacchon.dto.ConsultationDTO;
-import gr.codehub.sacchon.dto.DciMeasurementDTO;
-import gr.codehub.sacchon.dto.PatientDTO;
+import gr.codehub.sacchon.dto.*;
 import gr.codehub.sacchon.exception.BadRequestParamException;
 import gr.codehub.sacchon.exception.NotFoundException;
 import gr.codehub.sacchon.model.BgMeasurement;
@@ -40,25 +37,17 @@ public class MediDataVaultServiceImpl implements MediDataVaultService {
             throw new NotFoundException("No patient with this Email: " + patientEmailId);
         }
     }
-    public Map< String , Object > viewAccount(String patientEmailId) throws NotFoundException{
-        Map< String, Object > viewAccountMap =new HashMap<>();
-        Patient patient = getPatient(patientEmailId);
+    public PatientViewAccountDTO viewAccount(String patientEmailId) throws NotFoundException{
+        Patient patient= getPatient(patientEmailId);
 
-        viewAccountMap.put("patient",new PatientDTO(patient));
-        viewAccountMap.put("bgMeasurements",bgMeasurementRepository
-                .findBgMeasurementByPatient(patient)
-                .stream()
-                .map(BgMeasurementDTO::new)
-                .collect(Collectors.toList()));
-
-        viewAccountMap.put("dciMeasurements",dciMeasurementRepository
-                .findDciMeasurementByPatient(patient)
-                .stream()
-                .map(DciMeasurementDTO::new)
-                .collect(Collectors.toList()));
+        return new PatientViewAccountDTO(
+                patient,
+                bgMeasurementRepository.findBgMeasurementByPatient(patient).stream().map(BgMeasurementDTO::new).collect(Collectors.toList()),
+                dciMeasurementRepository.findDciMeasurementByPatient(patient).stream().map(DciMeasurementDTO::new).collect(Collectors.toList()),
+                consulationRepository.findConsultationByPatient(patient).stream().map(ConsultationDTO::new).collect(Collectors.toList()));
 
 
-        return viewAccountMap;
+
     }
 
 
@@ -69,14 +58,11 @@ public class MediDataVaultServiceImpl implements MediDataVaultService {
     }
 
     @Override
-    public boolean removeAccount(String patientEmailId) throws NotFoundException{
-        try {
-            Patient patient = getPatient(patientEmailId);
-            patientRepository.delete(patient);
-            return true;
-        }catch (RuntimeException e) {
-            return false;
-        }
+    public void removeAccount(String patientEmailId) throws NotFoundException{
+
+        Patient patient = getPatient(patientEmailId);
+        patientRepository.delete(patient);
+
     }
 
     @Override
@@ -160,7 +146,7 @@ public class MediDataVaultServiceImpl implements MediDataVaultService {
     @Override
     public DciMeasurementDTO updateDciMeasurement(DciMeasurementDTO dciMeasurementDTO,Long measurementId, String patientEmailId) throws NotFoundException{
         Patient patient = getPatient(patientEmailId);
-        Optional<DciMeasurement> dciMeasurementOptional = dciMeasurementRepository.findBgMeasurementByIdAndPatient(measurementId,patient);
+        Optional<DciMeasurement> dciMeasurementOptional = dciMeasurementRepository.findDciMeasurementByIdAndPatient(measurementId,patient);
         if (dciMeasurementOptional.isPresent()) {
             DciMeasurement dciMeasurement = dciMeasurementOptional.get();
             if (Objects.nonNull(dciMeasurementDTO.getDciMeasurementDate())) {
@@ -192,7 +178,7 @@ public class MediDataVaultServiceImpl implements MediDataVaultService {
     @Override
     public boolean deleteDciMeasurement(Long measurementId, String patientEmailId) throws NotFoundException {
         Patient patient = getPatient(patientEmailId);
-        Optional<DciMeasurement> dciMeasurementOptional = dciMeasurementRepository.findBgMeasurementByIdAndPatient(measurementId,patient);
+        Optional<DciMeasurement> dciMeasurementOptional = dciMeasurementRepository.findDciMeasurementByIdAndPatient(measurementId,patient);
         if (dciMeasurementOptional.isPresent()){
             dciMeasurementRepository.delete(dciMeasurementOptional.get());
             return true;
