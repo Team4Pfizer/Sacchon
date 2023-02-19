@@ -13,26 +13,26 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class PatientViewAccountDTO {
-    private PatientDTO patientDTO;
+    private PatientDTO patient;
 
-    private DoctorDTO patientsDoctorDTO;
-    private List<BgMeasurementDTO> bgMeasurementDTOList;
+    private DoctorDTO patientsDoctor;
+    private List<BgMeasurementDTO> bgMeasurementList;
 
-    private List<DciMeasurementDTO> dciMeasurementDTOList;
+    private List<DciMeasurementDTO> dciMeasurementList;
 
-    private List<ConsultationDTO> consultationDTOList;
+    private List<ConsultationDTO> consultationList;
 
     public PatientViewAccountDTO(Patient patient,List<BgMeasurementDTO> bgMeasurementDTOList,List<DciMeasurementDTO> dciMeasurementDTOList,List<ConsultationDTO> consultationDTOList){
-        this.patientDTO=new PatientDTO(patient);
+        this.patient=new PatientDTO(patient);
         try {
-            this.patientsDoctorDTO=new DoctorDTO(patient.getPatientsDoctor());
+            this.patientsDoctor=new DoctorDTO(patient.getPatientsDoctor());
         }catch (NullPointerException e){
-            this.patientsDoctorDTO=null;
+            this.patientsDoctor=null;
         }
 
-        this.bgMeasurementDTOList=bgMeasurementDTOList;
-        this.dciMeasurementDTOList=dciMeasurementDTOList;
-        this.consultationDTOList=consultationDTOList;
+        this.bgMeasurementList=bgMeasurementDTOList;
+        this.dciMeasurementList=dciMeasurementDTOList;
+        this.consultationList=consultationDTOList;
 
     }
 

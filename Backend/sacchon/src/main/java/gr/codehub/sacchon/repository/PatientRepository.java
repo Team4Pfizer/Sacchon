@@ -13,7 +13,8 @@ public interface PatientRepository extends JpaRepository<Patient,Long> {
     Optional<Patient> findByPatientEmailIdIgnoreCase(String patientEmailId);
 
     @Query(value ="select p from Patient p  where p.patientsDoctor=:doctor or p.patientsDoctor is null" )
-    List<Patient> findPatientByPatientsDoctorAndNotHavingADoctor(Doctor doctor);
+    List<Patient> findPatientsByPatientsDoctorAndNotHavingADoctor(Doctor doctor);
+
 
 
 }
