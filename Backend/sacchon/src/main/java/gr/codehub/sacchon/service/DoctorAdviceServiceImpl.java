@@ -57,7 +57,7 @@ public class DoctorAdviceServiceImpl implements DoctorAdviceService {
     public List<PatientViewAccountDTO> availablePatients(String doctorEmailId)throws NotFoundException{
         Doctor doctor = getDoctor(doctorEmailId);
         List<PatientViewAccountDTO> patientList = patientRepository
-                .findPatientsHavingMoreThanMonthOfMeasurements()
+                .findPatientsHavingMoreThanMonthOfMeasurementsAndTheyAreAvailable()
                 .stream().map(p-> {
                     try {
                         return mediDataVaultService.viewAccount(p.getPatientEmailId());
