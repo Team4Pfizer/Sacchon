@@ -16,7 +16,7 @@ import java.time.LocalTime;
 public class BgMeasurementDTO {
     private Long bgMeasurementId;
 
-    private int bgMeasurementData;
+    private Double bgMeasurementData;
 
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate bgMeasurementDate;

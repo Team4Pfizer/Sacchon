@@ -20,7 +20,6 @@ public class PatientViewAccountDTO {
 
     private List<DciMeasurementDTO> dciMeasurementList;
 
-    private List<ConsultationDTO> consultationList;
 
     public PatientViewAccountDTO(Patient patient,List<BgMeasurementDTO> bgMeasurementDTOList,List<DciMeasurementDTO> dciMeasurementDTOList,List<ConsultationDTO> consultationDTOList){
         this.patient=new PatientDTO(patient);
@@ -32,7 +31,7 @@ public class PatientViewAccountDTO {
 
         this.bgMeasurementList=bgMeasurementDTOList;
         this.dciMeasurementList=dciMeasurementDTOList;
-        this.consultationList=consultationDTOList;
+
 
     }
 

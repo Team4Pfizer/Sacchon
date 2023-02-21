@@ -12,10 +12,10 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ConsultationDTO {
-    private int consultationDosage ;
+    private Double consultationDosage ;
 
     private String consultationMedication ;
-    @JsonFormat(pattern = "yyyy-MM-dd")
+
     private LocalDate consultationDate;
 
     public ConsultationDTO(Consultation consultation){
@@ -24,13 +24,13 @@ public class ConsultationDTO {
         this.consultationDate=consultation.getConsultationDate();
     }
 
-    public Consultation toEntity(Patient patient){
+    public Consultation toEntity(Patient patient,LocalDate creationDate){
         return Consultation
                 .builder()
                 .patient(patient)
                 .consultationMedication(this.consultationMedication)
                 .consultationDosage(this.consultationDosage)
-                .consultationDate(this.consultationDate)
+                .consultationDate(creationDate)
                 .build();
     }
 

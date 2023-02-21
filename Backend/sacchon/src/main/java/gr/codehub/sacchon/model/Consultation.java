@@ -19,7 +19,7 @@ public class Consultation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long consultationId;
-    private int consultationDosage;
+    private Double consultationDosage;
 
     private String consultationMedication;
     private LocalDate consultationDate;

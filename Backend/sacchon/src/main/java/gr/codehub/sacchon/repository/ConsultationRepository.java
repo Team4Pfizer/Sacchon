@@ -7,9 +7,11 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
-public interface ConsulationRepository extends JpaRepository<Consultation,Long> {
+public interface ConsultationRepository extends JpaRepository<Consultation,Long> {
 
     @Query(value = "select c from Consultation c  where c.patient=:patient")
     List<Consultation> findConsultationByPatient(Patient patient);
+
+
 
 }

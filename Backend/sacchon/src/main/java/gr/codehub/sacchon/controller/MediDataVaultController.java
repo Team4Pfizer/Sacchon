@@ -13,7 +13,7 @@ import java.util.List;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/medidatavault")
+@RequestMapping("medidatavault")
 public class MediDataVaultController {
 
     private MediDataVaultService mediDataVaultService;

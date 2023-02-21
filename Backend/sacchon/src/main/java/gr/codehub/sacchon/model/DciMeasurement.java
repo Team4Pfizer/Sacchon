@@ -22,7 +22,7 @@ public class DciMeasurement {
     @GeneratedValue( strategy = GenerationType.IDENTITY)
     private Long dciMeasurementId;
 
-    private int dciMeasurementData;
+    private Double dciMeasurementData;
     private LocalDate dciMeasurementDate;
 
     @ManyToOne

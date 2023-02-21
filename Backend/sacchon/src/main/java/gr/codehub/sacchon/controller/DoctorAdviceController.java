@@ -1,6 +1,7 @@
 package gr.codehub.sacchon.controller;
 
 
+import gr.codehub.sacchon.dto.ConsultationDTO;
 import gr.codehub.sacchon.dto.DoctorDTO;
 import gr.codehub.sacchon.dto.PatientViewAccountDTO;
 import gr.codehub.sacchon.exception.NotFoundException;
@@ -13,7 +14,7 @@ import java.util.Map;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/doctoradvice")
+@RequestMapping("doctoradvice")
 public class DoctorAdviceController {
 
     private final DoctorAdviceService doctorAdviceService;
@@ -28,7 +29,7 @@ public class DoctorAdviceController {
         return doctorAdviceService.signUp(doctorDTO);
     }
 
-    @DeleteMapping("delete/{emailId}")
+    @DeleteMapping("/delete/{emailId}")
     public void removeAccount(@PathVariable("emailId") String doctorEmailId) throws NotFoundException {
         doctorAdviceService.removeAccount(doctorEmailId);
     }
@@ -36,6 +37,13 @@ public class DoctorAdviceController {
     @GetMapping("/availablepatients/{emailId}")
     public List<PatientViewAccountDTO> availablePatients (@PathVariable("emailId") String doctorEmailId)throws NotFoundException{
         return doctorAdviceService.availablePatients(doctorEmailId);
+    }
+
+    @PostMapping("consult/{doctorEmailId}/{patientId}")
+    public ConsultationDTO consultPatient (@RequestBody ConsultationDTO consultationDTO,
+                                           @PathVariable("doctorEmailId") String emailId,
+                                           @PathVariable("patientId") Long patientId)throws NotFoundException{
+        return doctorAdviceService.consultPatient(consultationDTO,emailId,patientId);
     }
 
 

@@ -15,7 +15,7 @@ import java.time.LocalDate;
 public class DciMeasurementDTO {
     private Long dciMeasurementId;
 
-    private int dciMeasurementData;
+    private Double dciMeasurementData;
 
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate dciMeasurementDate;

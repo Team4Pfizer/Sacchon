@@ -27,7 +27,7 @@ public class BgMeasurement {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long BgMeasurementId ;
 
-    private int BgMeasurementData;
+    private Double BgMeasurementData;
     private LocalDate BgMeasurementDate;
 
     private LocalTime BgMeasurementTime;

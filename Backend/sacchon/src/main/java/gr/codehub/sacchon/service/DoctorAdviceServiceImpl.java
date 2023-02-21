@@ -1,15 +1,20 @@
 package gr.codehub.sacchon.service;
 
 
+import gr.codehub.sacchon.dto.ConsultationDTO;
 import gr.codehub.sacchon.dto.DoctorDTO;
 import gr.codehub.sacchon.dto.PatientViewAccountDTO;
 import gr.codehub.sacchon.exception.NotFoundException;
 import gr.codehub.sacchon.model.Doctor;
+import gr.codehub.sacchon.model.Patient;
+import gr.codehub.sacchon.repository.ConsultationRepository;
 import gr.codehub.sacchon.repository.DoctorRepository;
 import gr.codehub.sacchon.repository.PatientRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.Clock;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,7 +26,9 @@ import java.util.stream.Collectors;
 public class DoctorAdviceServiceImpl implements DoctorAdviceService {
     private final DoctorRepository doctorRepository;
     private final PatientRepository patientRepository;
-    private final MediDataVaultService mediDataVaultService;
+    private final ConsultationRepository consultationRepository;
+    private final Clock clock;
+
 
     private Doctor getDoctor(String doctorEmailId) throws NotFoundException{
         Optional<Doctor> doctorOptional = doctorRepository.findByDoctorEmailIdIgnoreCase(doctorEmailId);
@@ -55,20 +62,35 @@ public class DoctorAdviceServiceImpl implements DoctorAdviceService {
 
     @Override
     public List<PatientViewAccountDTO> availablePatients(String doctorEmailId)throws NotFoundException{
-        Doctor doctor = getDoctor(doctorEmailId);
-        List<PatientViewAccountDTO> patientList = patientRepository
-                .findPatientsHavingMoreThanMonthOfMeasurementsAndTheyAreAvailable()
-                .stream().map(p-> {
-                    try {
-                        return mediDataVaultService.viewAccount(p.getPatientEmailId());
-                    } catch (NotFoundException e) {
-                        throw new RuntimeException(e);
-                    }
-                }).collect(Collectors.toList());
+//        Doctor doctor = getDoctor(doctorEmailId);
+//        List<PatientViewAccountDTO> patientList = patientRepository
+//                .findPatientsHavingMoreThanMonthOfMeasurementsAndTheyAreAvailable()
 
-        return patientList;
+
+        return null;
     }
 
+    @Override
+    public ConsultationDTO consultPatient(ConsultationDTO consultationDTO,String doctorEmailId, Long patientId)throws NotFoundException {
+        Optional<Patient> patientOptional = patientRepository.findById(patientId);
+        Optional<Doctor> doctorOptional = doctorRepository.findByDoctorEmailIdIgnoreCase(doctorEmailId);
+        if (patientOptional.isPresent() && doctorOptional.isPresent()){
+            Patient patient = patientOptional.get();
+
+            ConsultationDTO savedConsultationDTO = new ConsultationDTO(
+                    consultationRepository.save(consultationDTO.toEntity(patient, LocalDate.now(clock))));
+            patient.setPatientsDoctor(doctorOptional.get());
+            patientRepository.save(patient);
+
+            return savedConsultationDTO;
+        }else{
+            throw new NotFoundException("No doctor with this Email: " + doctorEmailId+ " or "+"No patient with this Id: " + patientId);
+
+        }
+
+
+
+    }
 
 
 }

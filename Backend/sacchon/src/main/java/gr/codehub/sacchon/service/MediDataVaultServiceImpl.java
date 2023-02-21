@@ -8,7 +8,7 @@ import gr.codehub.sacchon.model.Consultation;
 import gr.codehub.sacchon.model.DciMeasurement;
 import gr.codehub.sacchon.model.Patient;
 import gr.codehub.sacchon.repository.BgMeasurementRepository;
-import gr.codehub.sacchon.repository.ConsulationRepository;
+import gr.codehub.sacchon.repository.ConsultationRepository;
 import gr.codehub.sacchon.repository.DciMeasurementRepository;
 import gr.codehub.sacchon.repository.PatientRepository;
 import lombok.AllArgsConstructor;
@@ -26,7 +26,8 @@ public class MediDataVaultServiceImpl implements MediDataVaultService {
     private final BgMeasurementRepository bgMeasurementRepository;
     private final DciMeasurementRepository dciMeasurementRepository;
 
-    private final ConsulationRepository consulationRepository;
+    private final ConsultationRepository consulationRepository;
+
 
 
     private Patient getPatient(String patientEmailId)  throws NotFoundException{
