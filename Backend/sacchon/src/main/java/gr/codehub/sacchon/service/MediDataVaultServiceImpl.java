@@ -3,6 +3,7 @@ package gr.codehub.sacchon.service;
 import gr.codehub.sacchon.dto.*;
 import gr.codehub.sacchon.exception.BadRequestParamException;
 import gr.codehub.sacchon.exception.NotFoundException;
+import gr.codehub.sacchon.logger.CustomLoggerService;
 import gr.codehub.sacchon.model.BgMeasurement;
 import gr.codehub.sacchon.model.Consultation;
 import gr.codehub.sacchon.model.DciMeasurement;
@@ -26,7 +27,8 @@ public class MediDataVaultServiceImpl implements MediDataVaultService {
     private final BgMeasurementRepository bgMeasurementRepository;
     private final DciMeasurementRepository dciMeasurementRepository;
 
-    private final ConsultationRepository consulationRepository;
+    private final ConsultationRepository consultationRepository;
+    private final CustomLoggerService logger;
 
 
 
@@ -35,7 +37,8 @@ public class MediDataVaultServiceImpl implements MediDataVaultService {
         if (patientOptional.isPresent()) {
             return patientOptional.get();
         } else {
-            throw new NotFoundException("No patient with this Email: " + patientEmailId);
+            Long id=logger.logError("No patient with this Email: " + patientEmailId);
+            throw new NotFoundException("No patient with this Email: " + patientEmailId+". For more information the error Id is : "+id);
         }
     }
     public PatientViewAccountDTO viewAccount(String patientEmailId) throws NotFoundException{
@@ -43,7 +46,7 @@ public class MediDataVaultServiceImpl implements MediDataVaultService {
 
         return new PatientViewAccountDTO(
                 patient,
-                consulationRepository.findConsultationByPatient(patient).stream().map(ConsultationDTO::new).collect(Collectors.toList()));
+                consultationRepository.findConsultationByPatient(patient).stream().map(ConsultationDTO::new).collect(Collectors.toList()));
 
 
 
@@ -53,6 +56,7 @@ public class MediDataVaultServiceImpl implements MediDataVaultService {
     @Override
     public PatientDTO signUp(PatientDTO patientDTO) {
         Patient patient = patientRepository.save(patientDTO.toEntity());
+        logger.logInfo("Patient profile with the email :"+ patient.getPatientEmailId()+" created");
         return new PatientDTO(patient);
     }
 
@@ -61,6 +65,7 @@ public class MediDataVaultServiceImpl implements MediDataVaultService {
 
         Patient patient = getPatient(patientEmailId);
         patientRepository.delete(patient);
+        logger.logInfo("Patient profile with the email :"+ patient.getPatientEmailId()+" deleted");
 
     }
 
@@ -113,7 +118,7 @@ public class MediDataVaultServiceImpl implements MediDataVaultService {
     @Override
     public List<ConsultationDTO> getConsultations(String patientEmailId) throws NotFoundException{
         Patient patient =getPatient(patientEmailId);
-        List<Consultation> consultations = consulationRepository.findConsultationByPatient(patient);
+        List<Consultation> consultations = consultationRepository.findConsultationByPatient(patient);
 
         return consultations
                 .stream()

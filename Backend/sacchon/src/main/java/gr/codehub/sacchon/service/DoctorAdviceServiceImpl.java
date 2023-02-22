@@ -6,6 +6,7 @@ import gr.codehub.sacchon.dto.DoctorDTO;
 import gr.codehub.sacchon.dto.DoctorViewAccountDTO;
 import gr.codehub.sacchon.dto.PatientForDoctorViewDTO;
 import gr.codehub.sacchon.exception.NotFoundException;
+import gr.codehub.sacchon.logger.CustomLoggerService;
 import gr.codehub.sacchon.model.Doctor;
 import gr.codehub.sacchon.model.Patient;
 import gr.codehub.sacchon.repository.ConsultationRepository;
@@ -27,13 +28,17 @@ public class DoctorAdviceServiceImpl implements DoctorAdviceService {
     private final ConsultationRepository consultationRepository;
     private final Clock clock;
 
+    private final CustomLoggerService logger;
+
+
 
     private Doctor getDoctor(String doctorEmailId) throws NotFoundException{
         Optional<Doctor> doctorOptional = doctorRepository.findByDoctorEmailIdIgnoreCase(doctorEmailId);
         if (doctorOptional.isPresent()) {
             return doctorOptional.get();
         } else {
-            throw new NotFoundException("No doctor with this Email: " + doctorEmailId);
+            Long id=logger.logError("No doctor with this Email: " + doctorEmailId);
+            throw new NotFoundException("No doctor with this Email: " + doctorEmailId+". For more information the error Id is : "+id);
         }
     }
     @Override
@@ -50,6 +55,7 @@ public class DoctorAdviceServiceImpl implements DoctorAdviceService {
     @Override
     public DoctorDTO signUp(DoctorDTO doctorDTO) {
         Doctor doctor = doctorRepository.save(doctorDTO.toEntity());
+        logger.logInfo("Doctor profile with the email :"+ doctor.getDoctorEmailId()+" created");
         return new DoctorDTO(doctor);
     }
 
@@ -58,6 +64,7 @@ public class DoctorAdviceServiceImpl implements DoctorAdviceService {
 
         Doctor doctor = getDoctor(doctorEmailId);
         doctorRepository.delete(doctor);
+        logger.logInfo("Doctor profile with the email :"+ doctor.getDoctorEmailId()+" deleted");
     }
 
     @Override
