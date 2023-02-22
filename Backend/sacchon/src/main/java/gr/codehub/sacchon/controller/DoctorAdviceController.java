@@ -16,8 +16,8 @@ public class DoctorAdviceController {
 
     private final DoctorAdviceService doctorAdviceService;
 
-    @GetMapping("/myaccount/{emailId}")
-    public DoctorViewAccountDTO viewAccount(@PathVariable("emailId") String doctorEmailId) throws NotFoundException {
+    @GetMapping("/myaccount/{doctorEmailId}")
+    public DoctorViewAccountDTO viewAccount(@PathVariable("doctorEmailId") String doctorEmailId) throws NotFoundException {
         return doctorAdviceService.viewAccount(doctorEmailId);
     }
 
@@ -26,13 +26,13 @@ public class DoctorAdviceController {
         return doctorAdviceService.signUp(doctorDTO);
     }
 
-    @DeleteMapping("/delete/{emailId}")
-    public void removeAccount(@PathVariable("emailId") String doctorEmailId) throws NotFoundException {
+    @DeleteMapping("/delete/{doctorEmailId}")
+    public void removeAccount(@PathVariable("doctorEmailId") String doctorEmailId) throws NotFoundException {
         doctorAdviceService.removeAccount(doctorEmailId);
     }
 
-    @GetMapping("/availablepatients/{emailId}")
-    public List<PatientForDoctorViewDTO> availablePatients (@PathVariable("emailId") String doctorEmailId)throws NotFoundException{
+    @GetMapping("/availablepatients/{doctorEmailId}")
+    public List<PatientDTO> availablePatients (@PathVariable("doctorEmailId") String doctorEmailId)throws NotFoundException{
         return doctorAdviceService.availablePatients(doctorEmailId);
     }
 
@@ -41,6 +41,14 @@ public class DoctorAdviceController {
                                            @PathVariable("doctorEmailId") String emailId,
                                            @PathVariable("patientId") Long patientId)throws NotFoundException{
         return doctorAdviceService.consultPatient(consultationDTO,emailId,patientId);
+    }
+
+    @GetMapping("/patient/{doctorEmailId}/{patientId}")
+    public PatientForDoctorViewDTO patientProfile (@PathVariable("doctorEmailId") String doctorEmailId,
+                                                   @PathVariable("patientId") Long patientId)throws NotFoundException{
+        return doctorAdviceService.patientProfile(doctorEmailId,patientId);
+
+
     }
 
 

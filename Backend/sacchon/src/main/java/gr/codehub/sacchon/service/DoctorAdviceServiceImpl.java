@@ -1,17 +1,12 @@
 package gr.codehub.sacchon.service;
 
 
-import gr.codehub.sacchon.dto.ConsultationDTO;
-import gr.codehub.sacchon.dto.DoctorDTO;
-import gr.codehub.sacchon.dto.DoctorViewAccountDTO;
-import gr.codehub.sacchon.dto.PatientForDoctorViewDTO;
+import gr.codehub.sacchon.dto.*;
 import gr.codehub.sacchon.exception.NotFoundException;
 import gr.codehub.sacchon.logger.CustomLoggerService;
 import gr.codehub.sacchon.model.Doctor;
 import gr.codehub.sacchon.model.Patient;
-import gr.codehub.sacchon.repository.ConsultationRepository;
-import gr.codehub.sacchon.repository.DoctorRepository;
-import gr.codehub.sacchon.repository.PatientRepository;
+import gr.codehub.sacchon.repository.*;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -27,8 +22,9 @@ public class DoctorAdviceServiceImpl implements DoctorAdviceService {
     private final PatientRepository patientRepository;
     private final ConsultationRepository consultationRepository;
     private final Clock clock;
-
     private final CustomLoggerService logger;
+    private final BgMeasurementRepository bgMeasurementRepository;
+    private final DciMeasurementRepository dciMeasurementRepository;
 
 
 
@@ -68,12 +64,12 @@ public class DoctorAdviceServiceImpl implements DoctorAdviceService {
     }
 
     @Override
-    public List<PatientForDoctorViewDTO> availablePatients(String doctorEmailId)throws NotFoundException{
+    public List<PatientDTO> availablePatients(String doctorEmailId)throws NotFoundException{
         Doctor doctor = getDoctor(doctorEmailId);
-        List<PatientForDoctorViewDTO> patientList = patientRepository
+        List<PatientDTO> patientList = patientRepository
                 .findPatientsHavingMoreThanMonthOfMeasurementsAndTheyAreAvailable(doctor.getDoctorId())
                 .stream()
-                .map(PatientForDoctorViewDTO::new)
+                .map(PatientDTO::new)
                 .toList();
 
         return patientList;
@@ -93,11 +89,38 @@ public class DoctorAdviceServiceImpl implements DoctorAdviceService {
 
             return savedConsultationDTO;
         }else{
-            throw new NotFoundException("No doctor with this Email: " + doctorEmailId+ " or "+"No patient with this Id: " + patientId);
+            String message="No doctor with this Email: " + doctorEmailId+ " or "+"No patient with this Id: " + patientId;
+            Long id=logger.logError(message);
+            throw new NotFoundException(message+". For more information the error Id is : "+id);
 
         }
+    }
 
+    @Override
+    public PatientForDoctorViewDTO patientProfile(String doctorEmailId, Long patientId) throws NotFoundException {
+        Optional<Patient> patientOptional = patientRepository.findById(patientId);
+        Doctor doctor = getDoctor(doctorEmailId);
+        if (patientOptional.isPresent()) {
+            Patient patient = patientOptional.get();
 
+            if (patientOptional.get().getPatientsDoctor().equals(doctor)){
+                return new PatientForDoctorViewDTO(patient,
+                        consultationRepository.findConsultationByPatient(patient).stream().map(ConsultationDTO::new).toList(),
+                        bgMeasurementRepository.findBgMeasurementByPatient(patient).stream().map(BgMeasurementDTO::new).toList(),
+                        dciMeasurementRepository.findDciMeasurementByPatient(patient).stream().map(DciMeasurementDTO::new).toList()
+                        );
+
+            }else{
+                String message = "The Credentials of the Patient are not connected to the doctor with EmailId : "+doctorEmailId;
+                Long id=logger.logError(message+" Patient Id :"+patientId);
+                throw new NotFoundException(message+". For more information the error Id is : "+id);
+            }
+
+        }else {
+            String message ="No patient with this ID: " + patientId;
+            Long id=logger.logError(message);
+            throw new NotFoundException(message+". For more information the error Id is : "+id);
+        }
 
     }
 

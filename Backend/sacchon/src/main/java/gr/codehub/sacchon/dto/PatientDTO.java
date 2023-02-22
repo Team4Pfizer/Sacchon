@@ -9,6 +9,7 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class PatientDTO {
+    private Long patientId ;
     private String patientFirstName ;
     private String patientLastName ;
     private String patientEmailId ;
@@ -16,7 +17,9 @@ public class PatientDTO {
 
 
 
+
     public PatientDTO(Patient patient){
+        this.patientId=patient.getPatientId();
         this.patientEmailId=patient.getPatientEmailId();
         this.patientFirstName=patient.getPatientFirstName();
         this.patientLastName=patient.getPatientLastName();

@@ -12,8 +12,10 @@ public interface DoctorAdviceService {
 
     void removeAccount(String doctorEmailId) throws NotFoundException ;
 
-    List<PatientForDoctorViewDTO> availablePatients(String doctorEmailId) throws NotFoundException;
+    List<PatientDTO> availablePatients(String doctorEmailId) throws NotFoundException;
 
     ConsultationDTO consultPatient(ConsultationDTO consultationDTO,String emailId, Long patientId)throws NotFoundException;
+
+    PatientForDoctorViewDTO patientProfile(String doctorEmailId,Long patientId)throws NotFoundException;
 
 }

@@ -37,8 +37,9 @@ public class MediDataVaultServiceImpl implements MediDataVaultService {
         if (patientOptional.isPresent()) {
             return patientOptional.get();
         } else {
-            Long id=logger.logError("No patient with this Email: " + patientEmailId);
-            throw new NotFoundException("No patient with this Email: " + patientEmailId+". For more information the error Id is : "+id);
+            String message ="No patient with this Email: " + patientEmailId;
+            Long id=logger.logError(message);
+            throw new NotFoundException(message+". For more information the error Id is : "+id);
         }
     }
     public PatientViewAccountDTO viewAccount(String patientEmailId) throws NotFoundException{
@@ -47,8 +48,6 @@ public class MediDataVaultServiceImpl implements MediDataVaultService {
         return new PatientViewAccountDTO(
                 patient,
                 consultationRepository.findConsultationByPatient(patient).stream().map(ConsultationDTO::new).collect(Collectors.toList()));
-
-
 
     }
 
