@@ -14,9 +14,8 @@ public interface PatientRepository extends JpaRepository<Patient,Long> {
     @Query(value =
             "select * from patients pt where DATEADD(month,1,(SELECT min(dci_measurement_date) FROM dci_measurements dci1" +
                     " where dci1.patient_id=pt.patient_id))<=(SELECT Max(dci_measurement_date) FROM dci_measurements dci2" +
-                    " where dci2.patient_id=pt.patient_id) and (pt.doctor_id IS NULL )",nativeQuery = true)
-//    OR pt.doctor_id=1?
-    List<Patient> findPatientsHavingMoreThanMonthOfMeasurementsAndTheyAreAvailable();
+                    " where dci2.patient_id=pt.patient_id) and (pt.doctor_id IS NULL or pt.doctor_id=?1)",nativeQuery = true)
+    List<Patient> findPatientsHavingMoreThanMonthOfMeasurementsAndTheyAreAvailable(Long doctorId);
 
 
 
