@@ -159,7 +159,7 @@ public class DoctorAdviceServiceImpl implements DoctorAdviceService {
 
                 }else {
                     String message = "The Consultation doesn't belong to the patient that is provided";
-                    Long id = logger.logError(message + " : Patient provided ID :" + consultationOptional.get().getPatient().getPatientId()
+                    Long id = logger.logError(message + " : Patient provided ID :" + patientId
                             + " the consultation patient ID :" + consultation.getPatient().getPatientId());
                     throw new NotFoundException(message + ". For more information the error Id is : " + id);
                 }
