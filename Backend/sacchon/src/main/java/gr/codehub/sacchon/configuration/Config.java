@@ -19,8 +19,9 @@ public class Config {
     @Bean
     public Clock clock() {
 
-        return Clock.systemDefaultZone();
-
+//        return Clock.systemDefaultZone();
+        return Clock.fixed(Instant.parse("2022-08-01T10:15:00.00Z"),
+                Clock.systemDefaultZone().getZone());
     }
 
 

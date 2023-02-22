@@ -24,6 +24,8 @@ public class Patient {
     private String patientFirstName ;
     private String patientLastName ;
 
+    private Boolean alarm=false;
+
 
     @ManyToOne
     @JoinColumn(name = "doctor_id", referencedColumnName = "doctorId")

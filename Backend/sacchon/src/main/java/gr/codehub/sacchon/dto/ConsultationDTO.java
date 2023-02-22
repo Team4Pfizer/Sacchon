@@ -1,9 +1,11 @@
 package gr.codehub.sacchon.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import gr.codehub.sacchon.model.Consultation;
 import gr.codehub.sacchon.model.Patient;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
@@ -12,6 +14,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ConsultationDTO {
+    private Long consultationId;
     private Double consultationDosage ;
 
     private String consultationMedication ;
@@ -22,6 +25,7 @@ public class ConsultationDTO {
         this.consultationDosage=consultation.getConsultationDosage();
         this.consultationMedication=consultation.getConsultationMedication();
         this.consultationDate=consultation.getConsultationDate();
+        this.consultationId=consultation.getConsultationId();
     }
 
     public Consultation toEntity(Patient patient,LocalDate creationDate){

@@ -47,9 +47,13 @@ public class DoctorAdviceController {
     public PatientForDoctorViewDTO patientProfile (@PathVariable("doctorEmailId") String doctorEmailId,
                                                    @PathVariable("patientId") Long patientId)throws NotFoundException{
         return doctorAdviceService.patientProfile(doctorEmailId,patientId);
-
-
     }
 
+    @PutMapping("/updateconsultation/{doctorEmailId}/{patientId}")
+    public ConsultationDTO updateConsultation (@PathVariable("doctorEmailId") String doctorEmailId,
+                                               @PathVariable("patientId") Long patientId,
+                                               @RequestBody ConsultationDTO consultationDTO)throws NotFoundException{
+        return doctorAdviceService.updateConsultation(doctorEmailId,patientId,consultationDTO);
+    }
 
 }

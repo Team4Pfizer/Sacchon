@@ -18,4 +18,6 @@ public interface DoctorAdviceService {
 
     PatientForDoctorViewDTO patientProfile(String doctorEmailId,Long patientId)throws NotFoundException;
 
+    ConsultationDTO updateConsultation(String doctorEmailId,Long patientId,ConsultationDTO consultationDTO)throws NotFoundException;
+
 }

@@ -16,12 +16,13 @@ public class PatientViewAccountDTO {
     private PatientDTO patient;
 
     private DoctorDTO patientsDoctor;
-    private List<ConsultationDTO> consultationDTOList;
+    private List<BgMeasurementDTO> bgMeasurementList;
+    private List<DciMeasurementDTO> dciMeasurementList;
 
 
 
 
-    public PatientViewAccountDTO(Patient patient,List<ConsultationDTO> consultationDTOList){
+    public PatientViewAccountDTO(Patient patient,List<BgMeasurementDTO> bgMeasurementList,List<DciMeasurementDTO> dciMeasurementList){
         this.patient=new PatientDTO(patient);
         try {
             this.patientsDoctor=new DoctorDTO(patient.getPatientsDoctor());
@@ -29,7 +30,8 @@ public class PatientViewAccountDTO {
             this.patientsDoctor=null;
 
         }
-        this.consultationDTOList=consultationDTOList;
+        this.bgMeasurementList=bgMeasurementList;
+        this.dciMeasurementList=dciMeasurementList;
 
 
 
