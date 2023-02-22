@@ -94,7 +94,9 @@ public class MediDataVaultServiceImpl implements MediDataVaultService {
                     .mapToDouble(x -> x)
                     .sum() / bgMeasurementList.size();
         }else {
-            throw new BadRequestParamException("The start date : "+start+" must be before end date : "+stop);
+            Long id=logger.logError("Patient with this Email: " + patientEmailId+". Had a BadRequestParamException with this message: "+
+                    "The start date : "+start+" must be before end date : "+stop);
+            throw new BadRequestParamException("The start date : "+start+" must be before end date : "+stop+". For more information the error Id is : "+id);
         }
 
     }
@@ -111,7 +113,10 @@ public class MediDataVaultServiceImpl implements MediDataVaultService {
                     .mapToDouble(x -> x)
                     .sum() / dciMeasurementList.size();
         }else {
-            throw new BadRequestParamException("The start date : "+start+" must be before end date : "+stop);
+            String message = "Patient with this Email: " + patientEmailId+". Had a BadRequestParamException with this message: "+
+                    "The start date : "+start+" must be before end date : "+stop;
+            Long id=logger.logError(message);
+            throw new BadRequestParamException("The start date : "+start+" must be before end date : "+stop+". For more information the error Id is : "+id);
         }
     }
 
@@ -143,8 +148,11 @@ public class MediDataVaultServiceImpl implements MediDataVaultService {
                 bgMeasurement.setBgMeasurementData(bgMeasurementDTO.getBgMeasurementData());
             }
             return new BgMeasurementDTO(bgMeasurementRepository.save(bgMeasurement));
-        }else
-            throw new NotFoundException("No Blood glucose level measurement with this Email Id: " + patientEmailId+ " and this Measurement Id: "+measurementId);
+        }else{
+            String message ="No Blood glucose level measurement with this Email Id: " + patientEmailId+ " and this Measurement Id: " +measurementId;
+            Long id=logger.logError(message);
+            throw new NotFoundException(message+". For more information the error Id is : "+ id);
+        }
     }
 
     @Override
@@ -161,7 +169,11 @@ public class MediDataVaultServiceImpl implements MediDataVaultService {
             }
             return new DciMeasurementDTO(dciMeasurementRepository.save(dciMeasurement));
         }else {
-            throw new NotFoundException("No Daily Carb measurement with this Email Id: " + patientEmailId+ " and this Measurement Id: "+measurementId);
+            String message = "No Daily Carb measurement with this Email Id: " +
+                    patientEmailId+ " and this Measurement Id: "
+                    +measurementId;
+            Long id=logger.logError(message);
+            throw new NotFoundException(message+". For more information the error Id is : "+id);
         }
     }
 
