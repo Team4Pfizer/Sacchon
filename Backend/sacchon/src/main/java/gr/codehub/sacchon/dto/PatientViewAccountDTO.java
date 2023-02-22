@@ -16,21 +16,21 @@ public class PatientViewAccountDTO {
     private PatientDTO patient;
 
     private DoctorDTO patientsDoctor;
-    private List<BgMeasurementDTO> bgMeasurementList;
-
-    private List<DciMeasurementDTO> dciMeasurementList;
+    private List<ConsultationDTO> consultationDTOList;
 
 
-    public PatientViewAccountDTO(Patient patient,List<BgMeasurementDTO> bgMeasurementDTOList,List<DciMeasurementDTO> dciMeasurementDTOList,List<ConsultationDTO> consultationDTOList){
+
+
+    public PatientViewAccountDTO(Patient patient,List<ConsultationDTO> consultationDTOList){
         this.patient=new PatientDTO(patient);
         try {
             this.patientsDoctor=new DoctorDTO(patient.getPatientsDoctor());
         }catch (NullPointerException e){
             this.patientsDoctor=null;
-        }
 
-        this.bgMeasurementList=bgMeasurementDTOList;
-        this.dciMeasurementList=dciMeasurementDTOList;
+        }
+        this.consultationDTOList=consultationDTOList;
+
 
 
     }

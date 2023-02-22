@@ -1,10 +1,7 @@
 package gr.codehub.sacchon.controller;
 
 
-import gr.codehub.sacchon.dto.ConsultationDTO;
-import gr.codehub.sacchon.dto.DoctorDTO;
-import gr.codehub.sacchon.dto.DoctorViewAccountDTO;
-import gr.codehub.sacchon.dto.PatientViewAccountDTO;
+import gr.codehub.sacchon.dto.*;
 import gr.codehub.sacchon.exception.NotFoundException;
 import gr.codehub.sacchon.service.DoctorAdviceService;
 import lombok.AllArgsConstructor;
@@ -35,7 +32,7 @@ public class DoctorAdviceController {
     }
 
     @GetMapping("/availablepatients/{emailId}")
-    public List<PatientViewAccountDTO> availablePatients (@PathVariable("emailId") String doctorEmailId)throws NotFoundException{
+    public List<PatientForDoctorViewDTO> availablePatients (@PathVariable("emailId") String doctorEmailId)throws NotFoundException{
         return doctorAdviceService.availablePatients(doctorEmailId);
     }
 

@@ -4,7 +4,7 @@ package gr.codehub.sacchon.service;
 import gr.codehub.sacchon.dto.ConsultationDTO;
 import gr.codehub.sacchon.dto.DoctorDTO;
 import gr.codehub.sacchon.dto.DoctorViewAccountDTO;
-import gr.codehub.sacchon.dto.PatientViewAccountDTO;
+import gr.codehub.sacchon.dto.PatientForDoctorViewDTO;
 import gr.codehub.sacchon.exception.NotFoundException;
 import gr.codehub.sacchon.model.Doctor;
 import gr.codehub.sacchon.model.Patient;
@@ -61,13 +61,15 @@ public class DoctorAdviceServiceImpl implements DoctorAdviceService {
     }
 
     @Override
-    public List<PatientViewAccountDTO> availablePatients(String doctorEmailId)throws NotFoundException{
-//        Doctor doctor = getDoctor(doctorEmailId);
-//        List<PatientViewAccountDTO> patientList = patientRepository
-//                .findPatientsHavingMoreThanMonthOfMeasurementsAndTheyAreAvailable()
+    public List<PatientForDoctorViewDTO> availablePatients(String doctorEmailId)throws NotFoundException{
+        Doctor doctor = getDoctor(doctorEmailId);
+        List<PatientForDoctorViewDTO> patientList = patientRepository
+                .findPatientsHavingMoreThanMonthOfMeasurementsAndTheyAreAvailable(doctor.getDoctorId())
+                .stream()
+                .map(PatientForDoctorViewDTO::new)
+                .toList();
 
-
-        return null;
+        return patientList;
     }
 
     @Override

@@ -1,14 +1,17 @@
 package gr.codehub.sacchon.dto;
 
 import gr.codehub.sacchon.model.Patient;
-import lombok.*;
-
-
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class PatientDTO {
+public class PatientForDoctorViewDTO {
+    private Long patientId ;
+
     private String patientFirstName ;
     private String patientLastName ;
     private String patientEmailId ;
@@ -16,23 +19,11 @@ public class PatientDTO {
 
 
 
-    public PatientDTO(Patient patient){
+    public PatientForDoctorViewDTO(Patient patient){
+        this.patientId=patient.getPatientId();
         this.patientEmailId=patient.getPatientEmailId();
         this.patientFirstName=patient.getPatientFirstName();
         this.patientLastName=patient.getPatientLastName();
 
     }
-
-
-    public Patient toEntity(){
-        return Patient.builder()
-                .patientEmailId(this.patientEmailId)
-                .patientFirstName(this.patientFirstName)
-                .patientLastName(this.patientLastName)
-                .build();
-
-    }
-
-
-
 }

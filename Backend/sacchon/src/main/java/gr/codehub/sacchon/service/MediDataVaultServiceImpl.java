@@ -43,8 +43,6 @@ public class MediDataVaultServiceImpl implements MediDataVaultService {
 
         return new PatientViewAccountDTO(
                 patient,
-                bgMeasurementRepository.findBgMeasurementByPatient(patient).stream().map(BgMeasurementDTO::new).collect(Collectors.toList()),
-                dciMeasurementRepository.findDciMeasurementByPatient(patient).stream().map(DciMeasurementDTO::new).collect(Collectors.toList()),
                 consulationRepository.findConsultationByPatient(patient).stream().map(ConsultationDTO::new).collect(Collectors.toList()));
 
 
