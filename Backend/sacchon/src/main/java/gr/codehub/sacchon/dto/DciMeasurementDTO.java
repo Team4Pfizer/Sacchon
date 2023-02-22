@@ -13,6 +13,8 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 public class DciMeasurementDTO {
+
+
     private Long dciMeasurementId;
 
     private Double dciMeasurementData;

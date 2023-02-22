@@ -83,18 +83,14 @@ public class DoctorAdviceServiceImpl implements DoctorAdviceService {
         Optional<Doctor> doctorOptional = doctorRepository.findByDoctorEmailIdIgnoreCase(doctorEmailId);
         if (patientOptional.isPresent() && doctorOptional.isPresent()){
             Patient patient = patientOptional.get();
-            if (patient.getPatientsDoctor().getDoctorEmailId().equalsIgnoreCase(doctorEmailId)) {
-                ConsultationDTO savedConsultationDTO = new ConsultationDTO(
-                        consultationRepository.save(consultationDTO.toEntity(patient, LocalDate.now(clock))));
-                patient.setPatientsDoctor(doctorOptional.get());
-                patientRepository.save(patient);
 
-                return savedConsultationDTO;
-            }else{
-                String message="No patient with this Id: " + patientId+" is availiable for doctor with this Email: " + doctorEmailId;
-                Long id=logger.logError(message);
-                throw new NotFoundException(message+". For more information the error Id is : "+id);
-            }
+            ConsultationDTO savedConsultationDTO = new ConsultationDTO(
+                    consultationRepository.save(consultationDTO.toEntity(patient, LocalDate.now(clock))));
+            patient.setPatientsDoctor(doctorOptional.get());
+            patientRepository.save(patient);
+
+            return savedConsultationDTO;
+
         }
         String message="No doctor with this Email: " + doctorEmailId+ " or "+"No patient with this Id: " + patientId;
         Long id=logger.logError(message);
@@ -108,7 +104,7 @@ public class DoctorAdviceServiceImpl implements DoctorAdviceService {
         if (patientOptional.isPresent()) {
             Patient patient = patientOptional.get();
 
-            if (patientOptional.get().getPatientsDoctor().equals(doctor)){
+            if ((patientOptional.get().getPatientsDoctor()!=null) && (patientOptional.get().getPatientsDoctor().equals(doctor))){
                 return new PatientForDoctorViewDTO(patient,
                         consultationRepository.findConsultationByPatient(patient).stream().map(ConsultationDTO::new).toList(),
                         bgMeasurementRepository.findBgMeasurementByPatient(patient).stream().map(BgMeasurementDTO::new).toList(),
@@ -131,40 +127,53 @@ public class DoctorAdviceServiceImpl implements DoctorAdviceService {
 
     @Override
     public ConsultationDTO updateConsultation(String doctorEmailId, Long patientId, ConsultationDTO consultationDTO) throws NotFoundException {
-        Optional<Consultation> consultationOptional = consultationRepository.findById(consultationDTO.getConsultationId());
+        if (consultationDTO.getConsultationId()!=null) {
+            Optional<Consultation> consultationOptional = consultationRepository.findById(consultationDTO.getConsultationId());
 
-        if (consultationOptional.isPresent()) {
-            Consultation consultation = consultationOptional.get();
-            if (consultation.getPatient().getPatientId().equals(patientId)) {
+            if (consultationOptional.isPresent()) {
+                Consultation consultation = consultationOptional.get();
+                if (consultation.getPatient().getPatientId().equals(patientId)) {
 
-                if (getDoctor(doctorEmailId).equals(consultation.getPatient().getPatientsDoctor())) {
-                    Patient patient = patientRepository.findById(patientId).get();
+                    if (getDoctor(doctorEmailId).equals(consultation.getPatient().getPatientsDoctor())) {
+                        Patient patient = patientRepository.findById(patientId).get();
 
-                    if (Objects.nonNull(consultationDTO.getConsultationDosage())) {
-                        consultation.setConsultationDosage(consultationDTO.getConsultationDosage());
+                        if (Objects.nonNull(consultationDTO.getConsultationDosage())) {
+                            consultation.setConsultationDosage(consultationDTO.getConsultationDosage());
+                        }
+                        if (Objects.nonNull(consultationDTO.getConsultationMedication())) {
+                            consultation.setConsultationMedication(consultationDTO.getConsultationMedication());
+                        }
+
+
+                        consultation.setConsultationDate(LocalDate.now(clock));
+                        ConsultationDTO savedConsultationDTO = new ConsultationDTO(consultationRepository.save(consultation));
+                        patient.setAlarm(true);
+                        patientRepository.save(patient);
+                        return savedConsultationDTO;
+                    } else {
+                        String message = "The Patient isn't consulted by this doctor";
+                        Long id = logger.logError(message + " : Patient provided ID :" + consultationOptional.get().getPatient().getPatientId()
+                                + " the consultation patient ID :" + consultation.getPatient().getPatientId());
+                        throw new NotFoundException(message + ". For more information the error Id is : " + id);
                     }
-                    if (Objects.nonNull(consultationDTO.getConsultationMedication())) {
-                        consultation.setConsultationMedication(consultationDTO.getConsultationMedication());
-                    }
 
-
-                    consultation.setConsultationDate(LocalDate.now(clock));
-                    ConsultationDTO savedConsultationDTO = new ConsultationDTO(consultationRepository.save(consultation));
-                    patient.setAlarm(true);
-                    patientRepository.save(patient);
-                    return savedConsultationDTO;
+                }else {
+                    String message = "The Consultation doesn't belong to the patient that is provided";
+                    Long id = logger.logError(message + " : Patient provided ID :" + consultationOptional.get().getPatient().getPatientId()
+                            + " the consultation patient ID :" + consultation.getPatient().getPatientId());
+                    throw new NotFoundException(message + ". For more information the error Id is : " + id);
                 }
 
-            } else {
-                String message = "The Consultation doesn't belong to the patient that is provided";
-                Long id = logger.logError(message + " : Patient provided ID :" + consultationOptional.get().getPatient().getPatientId()
-                        + " the consultation patient ID :" + consultation.getPatient().getPatientId());
+            }else {
+                String message = "No consultation with this ID: " + consultationDTO.getConsultationId();
+                Long id = logger.logError(message);
                 throw new NotFoundException(message + ". For more information the error Id is : " + id);
+
             }
         }
-        String message ="No consultation with this ID: "+consultationDTO.getConsultationId();
-        Long id=logger.logError(message);
-        throw new NotFoundException(message+". For more information the error Id is : "+id);
+        String message = "No consultation ID provided";
+        Long id = logger.logError(message);
+        throw new NotFoundException(message + ". For more information the error Id is : " + id);
 
     }
 

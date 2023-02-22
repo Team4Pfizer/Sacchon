@@ -19,6 +19,7 @@ public class PatientForDoctorViewDTO {
     private String patientLastName ;
     private String patientEmailId ;
 
+
     private List<ConsultationDTO> consultationList;
 
     private List<BgMeasurementDTO> bgMeasurementList;

@@ -14,6 +14,7 @@ import java.util.List;
 @Builder
 public class PatientViewAccountDTO {
     private PatientDTO patient;
+    private boolean alarm;
 
     private DoctorDTO patientsDoctor;
     private List<BgMeasurementDTO> bgMeasurementList;
@@ -24,6 +25,7 @@ public class PatientViewAccountDTO {
 
     public PatientViewAccountDTO(Patient patient,List<BgMeasurementDTO> bgMeasurementList,List<DciMeasurementDTO> dciMeasurementList){
         this.patient=new PatientDTO(patient);
+        this.alarm=patient.getAlarm();
         try {
             this.patientsDoctor=new DoctorDTO(patient.getPatientsDoctor());
         }catch (NullPointerException e){

@@ -35,13 +35,7 @@ public class MediDataVaultServiceImpl implements MediDataVaultService {
     private Patient getPatient(String patientEmailId)  throws NotFoundException{
         Optional<Patient> patientOptional = patientRepository.findByPatientEmailIdIgnoreCase(patientEmailId);
         if (patientOptional.isPresent()) {
-            Patient patient = patientOptional.get();
-            if (patient.getAlarm()){
-                Patient savePatient =patientOptional.get();
-                savePatient.setAlarm(false);
-                patientRepository.save(savePatient);
-            }
-            return patient;
+            return patientOptional.get();
         } else {
             String message ="No patient with this Email: " + patientEmailId;
             Long id=logger.logError(message);
@@ -50,12 +44,19 @@ public class MediDataVaultServiceImpl implements MediDataVaultService {
     }
     public PatientViewAccountDTO viewAccount(String patientEmailId) throws NotFoundException{
         Patient patient= getPatient(patientEmailId);
-
-
-        return new PatientViewAccountDTO(
+        PatientViewAccountDTO patientViewAccountDTO = new PatientViewAccountDTO(
                 patient,
                 bgMeasurementRepository.findBgMeasurementByPatient(patient).stream().map(BgMeasurementDTO::new).toList(),
                 dciMeasurementRepository.findDciMeasurementByPatient(patient).stream().map(DciMeasurementDTO::new).toList());
+
+
+        if (patient.getAlarm()){
+            patient.setAlarm(false);
+            patientRepository.save(patient);
+        }
+
+
+        return patientViewAccountDTO;
 
     }
 
