@@ -3,6 +3,7 @@ package gr.codehub.sacchon.service;
 
 import gr.codehub.sacchon.dto.ConsultationDTO;
 import gr.codehub.sacchon.dto.DoctorDTO;
+import gr.codehub.sacchon.dto.DoctorViewAccountDTO;
 import gr.codehub.sacchon.dto.PatientViewAccountDTO;
 import gr.codehub.sacchon.exception.NotFoundException;
 import gr.codehub.sacchon.model.Doctor;
@@ -15,11 +16,8 @@ import org.springframework.stereotype.Service;
 
 import java.time.Clock;
 import java.time.LocalDate;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -39,12 +37,14 @@ public class DoctorAdviceServiceImpl implements DoctorAdviceService {
         }
     }
     @Override
-    public Map<String, Object> viewAccount(String doctorEmailId) throws NotFoundException {
-        Map< String, Object > viewAccountMap =new HashMap<>();
+    public DoctorViewAccountDTO viewAccount(String doctorEmailId) throws NotFoundException {
         Doctor doctor = getDoctor(doctorEmailId);
-        viewAccountMap.put("doctor",new DoctorDTO(doctor));
 
-        return viewAccountMap;
+        return new DoctorViewAccountDTO(
+                new DoctorDTO(doctor),
+                consultationRepository.findSumOfConsultationsByDoctor(doctor),
+                consultationRepository.findSumOfLastMonthConsultationsByDoctorAndDate(doctor,LocalDate.now(clock).minusMonths(1L))
+        );
     }
 
     @Override

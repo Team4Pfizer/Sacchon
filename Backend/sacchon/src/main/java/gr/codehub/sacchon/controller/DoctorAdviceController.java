@@ -3,6 +3,7 @@ package gr.codehub.sacchon.controller;
 
 import gr.codehub.sacchon.dto.ConsultationDTO;
 import gr.codehub.sacchon.dto.DoctorDTO;
+import gr.codehub.sacchon.dto.DoctorViewAccountDTO;
 import gr.codehub.sacchon.dto.PatientViewAccountDTO;
 import gr.codehub.sacchon.exception.NotFoundException;
 import gr.codehub.sacchon.service.DoctorAdviceService;
@@ -10,7 +11,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @AllArgsConstructor
@@ -20,7 +20,7 @@ public class DoctorAdviceController {
     private final DoctorAdviceService doctorAdviceService;
 
     @GetMapping("/myaccount/{emailId}")
-    public Map<String, Object> viewAccount(@PathVariable("emailId") String doctorEmailId) throws NotFoundException {
+    public DoctorViewAccountDTO viewAccount(@PathVariable("emailId") String doctorEmailId) throws NotFoundException {
         return doctorAdviceService.viewAccount(doctorEmailId);
     }
 

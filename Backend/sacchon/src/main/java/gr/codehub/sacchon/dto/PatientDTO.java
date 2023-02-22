@@ -12,6 +12,7 @@ public class PatientDTO {
     private String patientFirstName ;
     private String patientLastName ;
     private String patientEmailId ;
+    private Long patientId;
 
 
 
@@ -19,6 +20,7 @@ public class PatientDTO {
         this.patientEmailId=patient.getPatientEmailId();
         this.patientFirstName=patient.getPatientFirstName();
         this.patientLastName=patient.getPatientLastName();
+        this.patientId=patient.getPatientId();
 
     }
 

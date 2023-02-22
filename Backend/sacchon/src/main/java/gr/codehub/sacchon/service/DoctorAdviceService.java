@@ -2,14 +2,14 @@ package gr.codehub.sacchon.service;
 
 import gr.codehub.sacchon.dto.ConsultationDTO;
 import gr.codehub.sacchon.dto.DoctorDTO;
+import gr.codehub.sacchon.dto.DoctorViewAccountDTO;
 import gr.codehub.sacchon.dto.PatientViewAccountDTO;
 import gr.codehub.sacchon.exception.NotFoundException;
 
 import java.util.List;
-import java.util.Map;
 
 public interface DoctorAdviceService {
-    Map<String,Object> viewAccount (String doctorEmailId) throws NotFoundException;
+    DoctorViewAccountDTO viewAccount (String doctorEmailId) throws NotFoundException;
 
     DoctorDTO signUp(DoctorDTO doctorDTO);
 
