@@ -9,7 +9,7 @@ import lombok.*;
 @NoArgsConstructor
 public class DoctorDTO {
     private String doctorEmailId ;
-//    private String userPassword;
+
     private String doctorFirstName;
     private String doctorLastName;
 

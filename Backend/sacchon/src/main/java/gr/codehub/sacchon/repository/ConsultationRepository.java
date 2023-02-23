@@ -21,5 +21,10 @@ public interface ConsultationRepository extends JpaRepository<Consultation,Long>
     int findSumOfLastMonthConsultationsByDoctorAndDate(Doctor doctor, LocalDate date);
 
 
+    @Query(value = "select c from Consultation c  where c.patient.patientsDoctor=:doctor and " +
+            "c.consultationDate>=:start and c.consultationDate<=:stop")
+    List<Consultation> findSumOfConsultationsByDoctorAndBetweenDates(Doctor doctor, LocalDate start,LocalDate stop);
+
+
 
 }
