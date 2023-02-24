@@ -4,11 +4,10 @@ import gr.codehub.sacchon.dto.*;
 import gr.codehub.sacchon.exception.BadRequestException;
 import gr.codehub.sacchon.exception.NotFoundException;
 import gr.codehub.sacchon.service.MediDataVaultService;
+import gr.codehub.sacchon.validate.DateValidator;
 import lombok.AllArgsConstructor;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -49,21 +48,21 @@ public class MediDataVaultController {
     @GetMapping("/averagebgmeasurements/{patientEmailId}")
     public Double averageBgMeasurement(
             @PathVariable("patientEmailId") String patientEmailId,
-            @RequestParam("start") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate start,
-            @RequestParam("stop") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate stop) throws NotFoundException, BadRequestException {
+            @RequestParam("start")  String start,
+            @RequestParam("stop") String stop) throws NotFoundException, BadRequestException {
 
 
-        return mediDataVaultService.averageBgMeasurement(start,stop,patientEmailId);
+        return mediDataVaultService.averageBgMeasurement(DateValidator.validateDate(start),DateValidator.validateDate(stop),patientEmailId);
 
     }
     @GetMapping("/averagedcimeasurements/{patientEmailId}")
     public Double averageDciMeasurement(
             @PathVariable("patientEmailId") String patientEmailId,
-            @RequestParam("start") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate start,
-            @RequestParam("stop") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate stop) throws NotFoundException, BadRequestException {
+            @RequestParam("start") String start,
+            @RequestParam("stop") String stop) throws NotFoundException, BadRequestException {
 
 
-        return mediDataVaultService.averageDciMeasurement(start, stop, patientEmailId);
+        return mediDataVaultService.averageDciMeasurement(DateValidator.validateDate(start),DateValidator.validateDate(stop), patientEmailId);
 
 
     }
