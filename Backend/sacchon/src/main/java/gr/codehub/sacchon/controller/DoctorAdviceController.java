@@ -2,6 +2,7 @@ package gr.codehub.sacchon.controller;
 
 
 import gr.codehub.sacchon.dto.*;
+import gr.codehub.sacchon.exception.BadRequestException;
 import gr.codehub.sacchon.exception.NotFoundException;
 import gr.codehub.sacchon.service.DoctorAdviceService;
 import lombok.AllArgsConstructor;
@@ -45,14 +46,14 @@ public class DoctorAdviceController {
 
     @GetMapping("/patient/{doctorEmailId}/{patientId}")
     public PatientForDoctorViewDTO patientProfile (@PathVariable("doctorEmailId") String doctorEmailId,
-                                                   @PathVariable("patientId") Long patientId)throws NotFoundException{
+                                                   @PathVariable("patientId") Long patientId)throws NotFoundException, BadRequestException {
         return doctorAdviceService.patientProfile(doctorEmailId,patientId);
     }
 
     @PutMapping("/updateconsultation/{doctorEmailId}/{patientId}")
     public ConsultationDTO updateConsultation (@PathVariable("doctorEmailId") String doctorEmailId,
                                                @PathVariable("patientId") Long patientId,
-                                               @RequestBody ConsultationDTO consultationDTO)throws NotFoundException{
+                                               @RequestBody ConsultationDTO consultationDTO)throws NotFoundException,BadRequestException{
         return doctorAdviceService.updateConsultation(doctorEmailId,patientId,consultationDTO);
     }
 

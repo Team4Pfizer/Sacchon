@@ -1,6 +1,7 @@
 package gr.codehub.sacchon.service;
 
 import gr.codehub.sacchon.dto.*;
+import gr.codehub.sacchon.exception.BadRequestException;
 import gr.codehub.sacchon.exception.NotFoundException;
 
 import java.util.List;
@@ -16,8 +17,8 @@ public interface DoctorAdviceService {
 
     ConsultationDTO consultPatient(ConsultationDTO consultationDTO,String emailId, Long patientId)throws NotFoundException;
 
-    PatientForDoctorViewDTO patientProfile(String doctorEmailId,Long patientId)throws NotFoundException;
+    PatientForDoctorViewDTO patientProfile(String doctorEmailId,Long patientId)throws NotFoundException, BadRequestException;
 
-    ConsultationDTO updateConsultation(String doctorEmailId,Long patientId,ConsultationDTO consultationDTO)throws NotFoundException;
+    ConsultationDTO updateConsultation(String doctorEmailId,Long patientId,ConsultationDTO consultationDTO)throws NotFoundException,BadRequestException;
 
 }

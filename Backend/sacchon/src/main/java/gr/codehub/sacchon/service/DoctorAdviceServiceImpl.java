@@ -2,6 +2,7 @@ package gr.codehub.sacchon.service;
 
 
 import gr.codehub.sacchon.dto.*;
+import gr.codehub.sacchon.exception.BadRequestException;
 import gr.codehub.sacchon.exception.NotFoundException;
 import gr.codehub.sacchon.logger.CustomLoggerService;
 import gr.codehub.sacchon.model.Consultation;
@@ -98,7 +99,7 @@ public class DoctorAdviceServiceImpl implements DoctorAdviceService {
     }
 
     @Override
-    public PatientForDoctorViewDTO patientProfile(String doctorEmailId, Long patientId) throws NotFoundException {
+    public PatientForDoctorViewDTO patientProfile(String doctorEmailId, Long patientId) throws NotFoundException,BadRequestException {
         Optional<Patient> patientOptional = patientRepository.findById(patientId);
         Doctor doctor = getDoctor(doctorEmailId);
         if (patientOptional.isPresent()) {
@@ -114,7 +115,7 @@ public class DoctorAdviceServiceImpl implements DoctorAdviceService {
             }else{
                 String message = "The Credentials of the Patient are not connected to the doctor with EmailId : "+doctorEmailId;
                 Long id=logger.logError(message+" Patient Id :"+patientId);
-                throw new NotFoundException(message+". For more information the error Id is : "+id);
+                throw new BadRequestException(message+". For more information the error Id is : "+id);
             }
 
         }else {
@@ -126,7 +127,7 @@ public class DoctorAdviceServiceImpl implements DoctorAdviceService {
     }
 
     @Override
-    public ConsultationDTO updateConsultation(String doctorEmailId, Long patientId, ConsultationDTO consultationDTO) throws NotFoundException {
+    public ConsultationDTO updateConsultation(String doctorEmailId, Long patientId, ConsultationDTO consultationDTO) throws NotFoundException,BadRequestException {
         if (consultationDTO.getConsultationId()!=null) {
             Optional<Consultation> consultationOptional = consultationRepository.findById(consultationDTO.getConsultationId());
 
@@ -154,14 +155,14 @@ public class DoctorAdviceServiceImpl implements DoctorAdviceService {
                         String message = "The Patient isn't consulted by this doctor";
                         Long id = logger.logError(message + " : Patient provided ID :" + consultationOptional.get().getPatient().getPatientId()
                                 + " the consultation patient ID :" + consultation.getPatient().getPatientId());
-                        throw new NotFoundException(message + ". For more information the error Id is : " + id);
+                        throw new BadRequestException(message + ". For more information the error Id is : " + id);
                     }
 
                 }else {
                     String message = "The Consultation doesn't belong to the patient that is provided";
                     Long id = logger.logError(message + " : Patient provided ID : " + patientId
                             + " the consultation patient ID :" + consultation.getPatient().getPatientId());
-                    throw new NotFoundException(message + ". For more information the error Id is : " + id);
+                    throw new BadRequestException(message + ". For more information the error Id is : " + id);
                 }
 
             }else {
@@ -173,7 +174,7 @@ public class DoctorAdviceServiceImpl implements DoctorAdviceService {
         }
         String message = "No consultation ID provided";
         Long id = logger.logError(message);
-        throw new NotFoundException(message + ". For more information the error Id is : " + id);
+        throw new BadRequestException(message + ". For more information the error Id is : " + id);
 
     }
 

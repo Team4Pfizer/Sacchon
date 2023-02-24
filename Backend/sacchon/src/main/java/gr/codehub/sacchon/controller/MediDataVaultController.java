@@ -1,7 +1,7 @@
 package gr.codehub.sacchon.controller;
 
 import gr.codehub.sacchon.dto.*;
-import gr.codehub.sacchon.exception.BadRequestParamException;
+import gr.codehub.sacchon.exception.BadRequestException;
 import gr.codehub.sacchon.exception.NotFoundException;
 import gr.codehub.sacchon.service.MediDataVaultService;
 import lombok.AllArgsConstructor;
@@ -50,7 +50,7 @@ public class MediDataVaultController {
     public Double averageBgMeasurement(
             @PathVariable("patientEmailId") String patientEmailId,
             @RequestParam("start") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate start,
-            @RequestParam("stop") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate stop) throws NotFoundException, BadRequestParamException {
+            @RequestParam("stop") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate stop) throws NotFoundException, BadRequestException {
 
 
         return mediDataVaultService.averageBgMeasurement(start,stop,patientEmailId);
@@ -60,7 +60,7 @@ public class MediDataVaultController {
     public Double averageDciMeasurement(
             @PathVariable("patientEmailId") String patientEmailId,
             @RequestParam("start") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate start,
-            @RequestParam("stop") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate stop) throws NotFoundException,BadRequestParamException {
+            @RequestParam("stop") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate stop) throws NotFoundException, BadRequestException {
 
 
         return mediDataVaultService.averageDciMeasurement(start, stop, patientEmailId);

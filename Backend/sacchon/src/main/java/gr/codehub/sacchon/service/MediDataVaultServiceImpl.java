@@ -1,7 +1,7 @@
 package gr.codehub.sacchon.service;
 
 import gr.codehub.sacchon.dto.*;
-import gr.codehub.sacchon.exception.BadRequestParamException;
+import gr.codehub.sacchon.exception.BadRequestException;
 import gr.codehub.sacchon.exception.NotFoundException;
 import gr.codehub.sacchon.logger.CustomLoggerService;
 import gr.codehub.sacchon.model.BgMeasurement;
@@ -93,7 +93,7 @@ public class MediDataVaultServiceImpl implements MediDataVaultService {
 
     @Override
     public Double averageBgMeasurement(LocalDate start, LocalDate stop, String patientEmailId)
-            throws NotFoundException ,BadRequestParamException{
+            throws NotFoundException , BadRequestException {
         if (stop.isAfter(start)) {
             List<BgMeasurement> bgMeasurementList = bgMeasurementRepository
                     .findBgMeasurementByBgMeasurementDateIsBetweenAndPatient(start, stop, getPatient(patientEmailId));
@@ -102,16 +102,16 @@ public class MediDataVaultServiceImpl implements MediDataVaultService {
                     .mapToDouble(x -> x)
                     .sum() / bgMeasurementList.size();
         }else {
-            Long id=logger.logError("Patient with this Email: " + patientEmailId+". Had a BadRequestParamException with this message: "+
+            Long id=logger.logError("Patient with this Email: " + patientEmailId+". Had a BadRequestException with this message: "+
                     "The start date : "+start+" must be before end date : "+stop);
-            throw new BadRequestParamException("The start date : "+start+" must be before end date : "+stop+". For more information the error Id is : "+id);
+            throw new BadRequestException("The start date : "+start+" must be before end date : "+stop+". For more information the error Id is : "+id);
         }
 
     }
 
     @Override
     public Double averageDciMeasurement(LocalDate start, LocalDate stop, String patientEmailId)
-            throws NotFoundException , BadRequestParamException {
+            throws NotFoundException , BadRequestException {
         if (stop.isAfter(start)) {
             List<DciMeasurement> dciMeasurementList = dciMeasurementRepository
                     .findDciMeasurementByDciMeasurementDateIsBetweenAndPatient(start, stop, getPatient(patientEmailId));
@@ -121,10 +121,10 @@ public class MediDataVaultServiceImpl implements MediDataVaultService {
                     .mapToDouble(x -> x)
                     .sum() / dciMeasurementList.size();
         }else {
-            String message = "Patient with this Email: " + patientEmailId+". Had a BadRequestParamException with this message: "+
+            String message = "Patient with this Email: " + patientEmailId+". Had a BadRequestException with this message: "+
                     "The start date : "+start+" must be before end date : "+stop;
             Long id=logger.logError(message);
-            throw new BadRequestParamException("The start date : "+start+" must be before end date : "+stop+". For more information the error Id is : "+id);
+            throw new BadRequestException("The start date : "+start+" must be before end date : "+stop+". For more information the error Id is : "+id);
         }
     }
 

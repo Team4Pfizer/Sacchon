@@ -16,8 +16,8 @@ public class RestResponseExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(message);
     }
 
-    @ExceptionHandler(BadRequestParamException.class)
-    public ResponseEntity<ErrorMessage> badRequestParamException(BadRequestParamException exception){
+    @ExceptionHandler(BadRequestException.class)
+    public ResponseEntity<ErrorMessage> badRequestParamException(BadRequestException exception){
         ErrorMessage message = new ErrorMessage(HttpStatus.BAD_REQUEST,exception.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(message);
     }
