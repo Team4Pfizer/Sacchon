@@ -70,8 +70,9 @@ public class ReporterServiceImpl implements ReporterService{
         return list
                 .stream()
                 .map(x->PatientAndNoOfConsultationsDTO.builder()
-                        .patientEmailId((String) x[0])
-                        .totalConsultations((Integer) x[1])
+                        .patientId((Long) x[0])
+                        .patientEmailId((String) x[1])
+                        .totalConsultations((Integer) x[2])
                         .build())
                 .toList();
 

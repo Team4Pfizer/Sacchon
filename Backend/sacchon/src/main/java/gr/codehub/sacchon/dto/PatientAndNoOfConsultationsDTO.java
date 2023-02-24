@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class PatientAndNoOfConsultationsDTO {
+    private Long patientId;
     private String patientEmailId;
 
     private Integer totalConsultations;
