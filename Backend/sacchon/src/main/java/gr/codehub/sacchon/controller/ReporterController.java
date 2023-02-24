@@ -20,14 +20,14 @@ public class ReporterController {
     @GetMapping("/patient/dataovertime/{patientEmailId}")
     public PatientViewAccountDTO getPatientDataOverTimeRange (@PathVariable("patientEmailId") String patientEmailId,
                                                        @RequestParam("start") String start,
-                                                       @RequestParam("end")  String stop)throws NotFoundException, BadRequestException {
+                                                       @RequestParam("stop")  String stop)throws NotFoundException, BadRequestException {
         return reporterService.getPatientDataOverTimeRange(patientEmailId,DateValidator.validateDate(start),DateValidator.validateDate(stop));
 
     }
     @GetMapping("/doctor/dataovertime/{doctorEmailId}")
     public List<ConsultationDTO> getDoctorsConsultationsOverTimeRange (@PathVariable("doctorEmailId") String doctorEmailId,
                                                                 @RequestParam("start") String start,
-                                                                @RequestParam("end")  String stop)throws NotFoundException,BadRequestException{
+                                                                @RequestParam("stop")  String stop)throws NotFoundException,BadRequestException{
         return reporterService.getDoctorsConsultationsOverTimeRange(doctorEmailId,DateValidator.validateDate(start),DateValidator.validateDate(stop));
     }
     @GetMapping("patients/noconsultations")
@@ -36,12 +36,12 @@ public class ReporterController {
     }
     @GetMapping("/patients/consultations")
     public List<PatientAndNoOfConsultationsDTO> getPatientsWhoHaveBeenConsultedOverTimeRange (@RequestParam("start") String start,
-                                                                                              @RequestParam("end")  String stop)throws BadRequestException{
+                                                                                              @RequestParam("stop")  String stop)throws BadRequestException{
         return reporterService.getPatientsWhoHaveBeenConsultedOverTimeRange(DateValidator.validateDate(start),DateValidator.validateDate(stop));
     }
     @GetMapping("/patients/withoutactivity")
     List<PatientDTO> getPatientsWithNoActivityOverTimeRange(@RequestParam("start") String start,
-                                                            @RequestParam("end")  String stop)throws BadRequestException{
+                                                            @RequestParam("stop")  String stop)throws BadRequestException{
         return reporterService.getPatientsWithNoActivityOverTimeRange(DateValidator.validateDate(start),DateValidator.validateDate(stop));
     }
 

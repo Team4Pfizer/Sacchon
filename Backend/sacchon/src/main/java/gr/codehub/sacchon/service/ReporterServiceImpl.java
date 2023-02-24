@@ -9,7 +9,6 @@ import gr.codehub.sacchon.repository.*;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import javax.print.Doc;
 import java.time.Clock;
 import java.time.LocalDate;
 import java.util.List;
@@ -57,16 +56,34 @@ public class ReporterServiceImpl implements ReporterService{
     }
     @Override
     public List<PatientDTO> getPatientsWhoWaitConsultations() {
-        return null;
+
+        return patientRepository.findPatientsWaitingConsultations(LocalDate.now(clock))
+                .stream()
+                .map(PatientDTO::new)
+                .toList();
     }
 
     @Override
     public List<PatientAndNoOfConsultationsDTO> getPatientsWhoHaveBeenConsultedOverTimeRange(LocalDate start, LocalDate stop) {
-        return null;
+        List<Object[]> list = consultationRepository.findPatientAndNoOfConsultationsOverTimeRange(start,stop);
+
+        return list
+                .stream()
+                .map(x->PatientAndNoOfConsultationsDTO.builder()
+                        .patientEmailId((String) x[0])
+                        .totalConsultations((Integer) x[1])
+                        .build())
+                .toList();
+
+
+
+
     }
 
     @Override
     public List<PatientDTO> getPatientsWithNoActivityOverTimeRange(LocalDate start, LocalDate stop) {
+
+
         return null;
     }
 

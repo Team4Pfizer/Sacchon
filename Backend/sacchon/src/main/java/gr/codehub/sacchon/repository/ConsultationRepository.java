@@ -26,5 +26,10 @@ public interface ConsultationRepository extends JpaRepository<Consultation,Long>
     List<Consultation> findSumOfConsultationsByDoctorAndBetweenDates(Doctor doctor, LocalDate start,LocalDate stop);
 
 
+    @Query(value = "SELECT p.patient_email_id,count(c.patient_id) as totalConsultations " +
+            "FROM consultations c , patients p where c.consultation_date>=?1 and" +
+            " c.consultation_date<=?2 and p.patient_id=c.patient_id group by p.patient_email_id",nativeQuery = true)
+    List<Object[]> findPatientAndNoOfConsultationsOverTimeRange(LocalDate start, LocalDate stop);
+
 
 }
