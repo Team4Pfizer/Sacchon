@@ -10,12 +10,15 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+
 @RestController
 @AllArgsConstructor
 @RequestMapping("api/v1/doctoradvice")
 public class DoctorAdviceController {
 
     private final DoctorAdviceService doctorAdviceService;
+
+
 
     @GetMapping("/myaccount/{doctorEmailId}")
     public DoctorViewAccountDTO viewAccount(@PathVariable("doctorEmailId") String doctorEmailId) throws NotFoundException {

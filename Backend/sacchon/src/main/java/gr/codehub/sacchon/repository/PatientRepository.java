@@ -33,8 +33,11 @@ public interface PatientRepository extends JpaRepository<Patient,Long> {
 //TODO : The query
 
 
-
-//    select patient_id from patients pt where (select COUNT(*) from bg_measurements where bg_measurement_date>='2022-08-01' and bg_measurement_date<='2022-08-01' and bg_measurements.patient_id=pt.patient_id)=0
-
+//    @Query(value = "select patient_id from patients pt where (select COUNT(*) from bg_measurements where bg_measurement_date>='2022-08-01' and bg_measurement_date<='2022-08-01' and bg_measurements.patient_id=pt.patient_id)=0")
+    @Query(value = "select p.patient_id,p.patient_email_id,p.patient_first_name,p.patient_last_name from patients p where \n" +
+            "(select count(*) from bg_measurements \n" +
+            "where bg_measurements.bg_measurement_date>=?1 and\n" +
+            "bg_measurements.bg_measurement_date<=?2 and bg_measurements.patient_id=p.patient_id)=0", nativeQuery = true)
+    List<Object[]> findPatientsWithNoActivityOverTimePeriod(LocalDate start,LocalDate stop);
 
 }

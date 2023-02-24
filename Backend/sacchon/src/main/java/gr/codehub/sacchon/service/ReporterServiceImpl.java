@@ -2,7 +2,6 @@ package gr.codehub.sacchon.service;
 
 import gr.codehub.sacchon.dto.*;
 import gr.codehub.sacchon.exception.NotFoundException;
-import gr.codehub.sacchon.logger.CustomLoggerService;
 import gr.codehub.sacchon.model.Doctor;
 import gr.codehub.sacchon.model.Patient;
 import gr.codehub.sacchon.repository.*;
@@ -21,7 +20,6 @@ public class ReporterServiceImpl implements ReporterService{
     private final PatientRepository patientRepository;
     private final BgMeasurementRepository bgMeasurementRepository;
     private final DciMeasurementRepository dciMeasurementRepository;
-    private final CustomLoggerService logger;
     private final DoctorRepository doctorRepository;
     private final ConsultationRepository consultationRepository;
     private final Clock clock;
@@ -35,9 +33,8 @@ public class ReporterServiceImpl implements ReporterService{
                     bgMeasurementRepository.findBgMeasurementByBgMeasurementDateIsBetweenAndPatient(start,stop,patient).stream().map(BgMeasurementDTO::new).toList(),
                     dciMeasurementRepository.findDciMeasurementByDciMeasurementDateIsBetweenAndPatient(start,stop,patient).stream().map(DciMeasurementDTO::new).toList());
         }else{
-            String message ="No patient with this Email: " + patientEmailId;
-            Long id=logger.logError(message);
-            throw new NotFoundException(message+". For more information the error Id is : "+id);
+
+            throw new NotFoundException("No patient with this Email: " + patientEmailId);
         }
     }
     @Override
@@ -47,9 +44,7 @@ public class ReporterServiceImpl implements ReporterService{
             Doctor doctor=doctorOptional.get();
             return consultationRepository.findSumOfConsultationsByDoctorAndBetweenDates(doctor,start,stop).stream().map(ConsultationDTO::new).toList();
         }else {
-            String message ="No patient with this Email: " + doctorEmailId;
-            Long id=logger.logError(message);
-            throw new NotFoundException(message+". For more information the error Id is : "+id);
+            throw new NotFoundException("No doctor with this Email: " + doctorEmailId);
 
         }
 
@@ -85,11 +80,27 @@ public class ReporterServiceImpl implements ReporterService{
     public List<PatientDTO> getPatientsWithNoActivityOverTimeRange(LocalDate start, LocalDate stop) {
 
 
-        return null;
+        return patientRepository.findPatientsWithNoActivityOverTimePeriod(start,stop)
+                .stream()
+                .map(p->PatientDTO
+                        .builder()
+                        .patientId((Long)p[0])
+                        .patientEmailId((String) p[1])
+                        .patientFirstName((String) p[2])
+                        .patientLastName((String) p[3])
+                        .build())
+                .toList();
     }
 
     @Override
     public List<DoctorDTO> getDoctorsWithNoActivityOverTimeRange(LocalDate start, LocalDate stop) {
-        return null;
+        return doctorRepository.findDoctorsWithNoActivityOverTimePeriod(start,stop)
+                .stream()
+                .map(d->DoctorDTO.builder()
+                        .doctorEmailId((String) d[0])
+                        .doctorFirstName((String) d[1])
+                        .doctorLastName((String) d[2]).build())
+                .toList();
+
     }
 }

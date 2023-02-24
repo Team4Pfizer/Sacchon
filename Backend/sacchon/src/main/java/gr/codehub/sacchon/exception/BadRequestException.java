@@ -1,14 +1,19 @@
 package gr.codehub.sacchon.exception;
 
+
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 public class BadRequestException extends Exception{
-    public BadRequestException() {
-    }
+
+
 
     public BadRequestException(String message) {
+
         super(message);
+        log.warn(message,this.getClass());
+
     }
 
-    public BadRequestException(String message, Throwable cause) {
-        super(message, cause);
-    }
+
 }

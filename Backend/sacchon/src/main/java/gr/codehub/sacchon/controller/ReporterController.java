@@ -47,7 +47,7 @@ public class ReporterController {
 
     @GetMapping("/doctors/withoutactivity")
     List<DoctorDTO> getDoctorsWithNoActivityOverTimeRange(@RequestParam("start") String start,
-                                                          @RequestParam("end")  String stop)throws BadRequestException{
+                                                          @RequestParam("stop")  String stop)throws BadRequestException{
         return reporterService.getDoctorsWithNoActivityOverTimeRange(DateValidator.validateDate(start),DateValidator.validateDate(stop));
 
     }
