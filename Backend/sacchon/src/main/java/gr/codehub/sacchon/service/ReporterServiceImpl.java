@@ -24,8 +24,8 @@ public class ReporterServiceImpl implements ReporterService{
     private final ConsultationRepository consultationRepository;
     private final Clock clock;
     @Override
-    public PatientViewAccountDTO getPatientDataOverTimeRange(String patientEmailId, LocalDate start, LocalDate stop) throws NotFoundException {
-        Optional<Patient> patientOptional = patientRepository.findByPatientEmailIdIgnoreCase(patientEmailId);
+    public PatientViewAccountDTO getPatientDataOverTimeRange(Long patientId, LocalDate start, LocalDate stop) throws NotFoundException {
+        Optional<Patient> patientOptional = patientRepository.findById(patientId);
         if (patientOptional.isPresent()){
             Patient patient = patientOptional.get();
             return new PatientViewAccountDTO(
@@ -34,17 +34,20 @@ public class ReporterServiceImpl implements ReporterService{
                     dciMeasurementRepository.findDciMeasurementByDciMeasurementDateIsBetweenAndPatient(start,stop,patient).stream().map(DciMeasurementDTO::new).toList());
         }else{
 
-            throw new NotFoundException("No patient with this Email: " + patientEmailId);
+            throw new NotFoundException("No patient with this Id: " + patientId);
         }
     }
     @Override
-    public List<ConsultationDTO> getDoctorsConsultationsOverTimeRange(String doctorEmailId, LocalDate start, LocalDate stop) throws NotFoundException {
-        Optional<Doctor> doctorOptional = doctorRepository.findByDoctorEmailIdIgnoreCase(doctorEmailId);
+    public List<ConsultationDTO> getDoctorsConsultationsOverTimeRange(Long doctorId, LocalDate start, LocalDate stop) throws NotFoundException {
+        Optional<Doctor> doctorOptional = doctorRepository.findById(doctorId);
         if (doctorOptional.isPresent()){
             Doctor doctor=doctorOptional.get();
-            return consultationRepository.findSumOfConsultationsByDoctorAndBetweenDates(doctor,start,stop).stream().map(ConsultationDTO::new).toList();
+            return consultationRepository.findSumOfConsultationsByDoctorAndBetweenDates(doctor,start,stop)
+                    .stream()
+                    .map(ConsultationDTO::new)
+                    .toList();
         }else {
-            throw new NotFoundException("No doctor with this Email: " + doctorEmailId);
+            throw new NotFoundException("No doctor with this Id: " + doctorId);
 
         }
 

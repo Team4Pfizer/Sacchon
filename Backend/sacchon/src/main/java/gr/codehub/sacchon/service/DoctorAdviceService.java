@@ -7,18 +7,18 @@ import gr.codehub.sacchon.exception.NotFoundException;
 import java.util.List;
 
 public interface DoctorAdviceService {
-    DoctorViewAccountDTO viewAccount (String doctorEmailId) throws NotFoundException;
+    DoctorViewAccountDTO viewAccount (Long doctorId) throws NotFoundException;
 
     DoctorDTO signUp(DoctorDTO doctorDTO);
 
-    void removeAccount(String doctorEmailId) throws NotFoundException ;
+    void removeAccount(Long doctorId) throws NotFoundException ;
 
-    List<PatientDTO> availablePatients(String doctorEmailId) throws NotFoundException;
+    List<PatientDTO> availablePatients(Long doctorId) throws NotFoundException;
 
-    ConsultationDTO consultPatient(ConsultationDTO consultationDTO,String emailId, Long patientId)throws NotFoundException;
+    ConsultationDTO consultPatient(ConsultationDTO consultationDTO,Long doctorId, Long patientId)throws NotFoundException;
 
-    PatientForDoctorViewDTO patientProfile(String doctorEmailId,Long patientId)throws NotFoundException, BadRequestException;
+    PatientForDoctorViewDTO patientProfile(Long doctorId,Long patientId)throws NotFoundException, BadRequestException;
 
-    ConsultationDTO updateConsultation(String doctorEmailId,Long patientId,ConsultationDTO consultationDTO)throws NotFoundException,BadRequestException;
+    ConsultationDTO updateConsultation(Long doctorId,Long patientId,ConsultationDTO consultationDTO)throws NotFoundException,BadRequestException;
 
 }

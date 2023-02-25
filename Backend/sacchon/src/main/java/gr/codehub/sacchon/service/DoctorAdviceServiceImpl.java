@@ -31,18 +31,18 @@ public class DoctorAdviceServiceImpl implements DoctorAdviceService {
 
 
 
-    private Doctor getDoctor(String doctorEmailId) throws NotFoundException{
-        Optional<Doctor> doctorOptional = doctorRepository.findByDoctorEmailIdIgnoreCase(doctorEmailId);
+    private Doctor getDoctor(Long doctorId) throws NotFoundException{
+        Optional<Doctor> doctorOptional = doctorRepository.findById(doctorId);
         if (doctorOptional.isPresent()) {
             return doctorOptional.get();
         } else {
 
-            throw new NotFoundException("No doctor with this Email: " + doctorEmailId);
+            throw new NotFoundException("No doctor with this Id: " + doctorId);
         }
     }
     @Override
-    public DoctorViewAccountDTO viewAccount(String doctorEmailId) throws NotFoundException {
-        Doctor doctor = getDoctor(doctorEmailId);
+    public DoctorViewAccountDTO viewAccount(Long doctorId) throws NotFoundException {
+        Doctor doctor = getDoctor(doctorId);
 
         return new DoctorViewAccountDTO(
                 new DoctorDTO(doctor),
@@ -58,16 +58,16 @@ public class DoctorAdviceServiceImpl implements DoctorAdviceService {
     }
 
     @Override
-    public void removeAccount(String doctorEmailId) throws NotFoundException {
+    public void removeAccount(Long doctorId) throws NotFoundException {
 
-        Doctor doctor = getDoctor(doctorEmailId);
+        Doctor doctor = getDoctor(doctorId);
         doctorRepository.delete(doctor);
 
     }
 
     @Override
-    public List<PatientDTO> availablePatients(String doctorEmailId)throws NotFoundException{
-        Doctor doctor = getDoctor(doctorEmailId);
+    public List<PatientDTO> availablePatients(Long doctorId)throws NotFoundException{
+        Doctor doctor = getDoctor(doctorId);
         List<PatientDTO> patientList = patientRepository
                 .findPatientsHavingMoreThanMonthOfMeasurementsAndTheyAreAvailable(doctor.getDoctorId())
                 .stream()
@@ -78,28 +78,28 @@ public class DoctorAdviceServiceImpl implements DoctorAdviceService {
     }
 
     @Override
-    public ConsultationDTO consultPatient(ConsultationDTO consultationDTO,String doctorEmailId, Long patientId)throws NotFoundException {
+    public ConsultationDTO consultPatient(ConsultationDTO consultationDTO,Long doctorId, Long patientId)throws NotFoundException {
         Optional<Patient> patientOptional = patientRepository.findById(patientId);
-        Optional<Doctor> doctorOptional = doctorRepository.findByDoctorEmailIdIgnoreCase(doctorEmailId);
-        if (patientOptional.isPresent() && doctorOptional.isPresent()){
+        Doctor doctor = getDoctor(doctorId);
+        if (patientOptional.isPresent()){
             Patient patient = patientOptional.get();
 
             ConsultationDTO savedConsultationDTO = new ConsultationDTO(
                     consultationRepository.save(consultationDTO.toEntity(patient, LocalDate.now(clock))));
-            patient.setPatientsDoctor(doctorOptional.get());
+            patient.setPatientsDoctor(doctor);
             patientRepository.save(patient);
 
             return savedConsultationDTO;
 
         }
 
-        throw new NotFoundException("No doctor with this Email: " + doctorEmailId+ " or "+"No patient with this Id: " + patientId);
+        throw new NotFoundException("No patient with this Id: " + patientId);
     }
 
     @Override
-    public PatientForDoctorViewDTO patientProfile(String doctorEmailId, Long patientId) throws NotFoundException,BadRequestException {
+    public PatientForDoctorViewDTO patientProfile(Long doctorId, Long patientId) throws NotFoundException,BadRequestException {
         Optional<Patient> patientOptional = patientRepository.findById(patientId);
-        Doctor doctor = getDoctor(doctorEmailId);
+        Doctor doctor = getDoctor(doctorId);
         if (patientOptional.isPresent()) {
             Patient patient = patientOptional.get();
 
@@ -112,17 +112,17 @@ public class DoctorAdviceServiceImpl implements DoctorAdviceService {
 
             }else{
 
-                throw new BadRequestException("The Credentials of the Patient are not connected to the doctor with EmailId : "+doctorEmailId);
+                throw new BadRequestException("The Credentials of the Patient are not connected to the doctor with Id : "+doctorId);
             }
 
         }else {
-            throw new NotFoundException("No patient with this ID: " + patientId);
+            throw new NotFoundException("No patient with this Id: " + patientId);
         }
 
     }
 
     @Override
-    public ConsultationDTO updateConsultation(String doctorEmailId, Long patientId, ConsultationDTO consultationDTO) throws NotFoundException,BadRequestException {
+    public ConsultationDTO updateConsultation(Long doctorId, Long patientId, ConsultationDTO consultationDTO) throws NotFoundException,BadRequestException {
         if (consultationDTO.getConsultationId()!=null) {
             Optional<Consultation> consultationOptional = consultationRepository.findById(consultationDTO.getConsultationId());
 
@@ -130,7 +130,7 @@ public class DoctorAdviceServiceImpl implements DoctorAdviceService {
                 Consultation consultation = consultationOptional.get();
                 if (consultation.getPatient().getPatientId().equals(patientId)) {
 
-                    if (getDoctor(doctorEmailId).equals(consultation.getPatient().getPatientsDoctor())) {
+                    if (getDoctor(doctorId).equals(consultation.getPatient().getPatientsDoctor())) {
                         Patient patient = patientRepository.findById(patientId).get();
 
                         if (Objects.nonNull(consultationDTO.getConsultationDosage())) {

@@ -7,9 +7,9 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface ReporterService {
-    PatientViewAccountDTO getPatientDataOverTimeRange (String patientEmailId, LocalDate start, LocalDate stop)throws NotFoundException;
+    PatientViewAccountDTO getPatientDataOverTimeRange (Long patientId, LocalDate start, LocalDate stop)throws NotFoundException;
 
-    List<ConsultationDTO> getDoctorsConsultationsOverTimeRange (String doctorEmailId, LocalDate start, LocalDate stop)throws NotFoundException;
+    List<ConsultationDTO> getDoctorsConsultationsOverTimeRange (Long patientId, LocalDate start, LocalDate stop)throws NotFoundException;
 
     List<PatientDTO> getPatientsWhoWaitConsultations ();
 

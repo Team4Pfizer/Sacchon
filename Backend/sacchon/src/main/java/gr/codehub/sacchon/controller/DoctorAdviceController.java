@@ -20,9 +20,9 @@ public class DoctorAdviceController {
 
 
 
-    @GetMapping("/myaccount/{doctorEmailId}")
-    public DoctorViewAccountDTO viewAccount(@PathVariable("doctorEmailId") String doctorEmailId) throws NotFoundException {
-        return doctorAdviceService.viewAccount(doctorEmailId);
+    @GetMapping("/myaccount/{doctorId}")
+    public DoctorViewAccountDTO viewAccount(@PathVariable("doctorId")  Long doctorId) throws NotFoundException {
+        return doctorAdviceService.viewAccount(doctorId);
     }
 
     @PostMapping("/signup")
@@ -30,34 +30,34 @@ public class DoctorAdviceController {
         return doctorAdviceService.signUp(doctorDTO);
     }
 
-    @DeleteMapping("/delete/{doctorEmailId}")
-    public void removeAccount(@PathVariable("doctorEmailId") String doctorEmailId) throws NotFoundException {
-        doctorAdviceService.removeAccount(doctorEmailId);
+    @DeleteMapping("/delete/{doctorId}")
+    public void removeAccount(@PathVariable("doctorId") Long doctorId) throws NotFoundException {
+        doctorAdviceService.removeAccount(doctorId);
     }
 
-    @GetMapping("/availablepatients/{doctorEmailId}")
-    public List<PatientDTO> availablePatients (@PathVariable("doctorEmailId") String doctorEmailId)throws NotFoundException{
-        return doctorAdviceService.availablePatients(doctorEmailId);
+    @GetMapping("/availablepatients/{doctorId}")
+    public List<PatientDTO> availablePatients (@PathVariable("doctorId") Long doctorId)throws NotFoundException{
+        return doctorAdviceService.availablePatients(doctorId);
     }
 
-    @PostMapping("consult/{doctorEmailId}/{patientId}")
+    @PostMapping("consult/{doctorId}/{patientId}")
     public ConsultationDTO consultPatient (@RequestBody ConsultationDTO consultationDTO,
-                                           @PathVariable("doctorEmailId") String emailId,
+                                           @PathVariable("doctorId") Long doctorId,
                                            @PathVariable("patientId") Long patientId)throws NotFoundException{
-        return doctorAdviceService.consultPatient(consultationDTO,emailId,patientId);
+        return doctorAdviceService.consultPatient(consultationDTO,doctorId,patientId);
     }
 
-    @GetMapping("/patient/{doctorEmailId}/{patientId}")
-    public PatientForDoctorViewDTO patientProfile (@PathVariable("doctorEmailId") String doctorEmailId,
+    @GetMapping("/patient/{doctorId}/{patientId}")
+    public PatientForDoctorViewDTO patientProfile (@PathVariable("doctorId") Long doctorId,
                                                    @PathVariable("patientId") Long patientId)throws NotFoundException, BadRequestException {
-        return doctorAdviceService.patientProfile(doctorEmailId,patientId);
+        return doctorAdviceService.patientProfile(doctorId,patientId);
     }
 
-    @PutMapping("/updateconsultation/{doctorEmailId}/{patientId}")
-    public ConsultationDTO updateConsultation (@PathVariable("doctorEmailId") String doctorEmailId,
+    @PutMapping("/updateconsultation/{doctorId}/{patientId}")
+    public ConsultationDTO updateConsultation (@PathVariable("doctorId") Long doctorId,
                                                @PathVariable("patientId") Long patientId,
                                                @RequestBody ConsultationDTO consultationDTO)throws NotFoundException,BadRequestException{
-        return doctorAdviceService.updateConsultation(doctorEmailId,patientId,consultationDTO);
+        return doctorAdviceService.updateConsultation(doctorId,patientId,consultationDTO);
     }
 
 }

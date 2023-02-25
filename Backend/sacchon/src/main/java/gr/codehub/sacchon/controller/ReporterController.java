@@ -17,18 +17,18 @@ public class ReporterController {
     private final ReporterService reporterService;
 
 
-    @GetMapping("/patient/dataovertime/{patientEmailId}")
-    public PatientViewAccountDTO getPatientDataOverTimeRange (@PathVariable("patientEmailId") String patientEmailId,
+    @GetMapping("/patient/dataovertime/{patientId}")
+    public PatientViewAccountDTO getPatientDataOverTimeRange (@PathVariable("patientId") Long patientId,
                                                        @RequestParam("start") String start,
                                                        @RequestParam("stop")  String stop)throws NotFoundException, BadRequestException {
-        return reporterService.getPatientDataOverTimeRange(patientEmailId,DateValidator.validateDate(start),DateValidator.validateDate(stop));
+        return reporterService.getPatientDataOverTimeRange(patientId,DateValidator.validateDate(start),DateValidator.validateDate(stop));
 
     }
-    @GetMapping("/doctor/dataovertime/{doctorEmailId}")
-    public List<ConsultationDTO> getDoctorsConsultationsOverTimeRange (@PathVariable("doctorEmailId") String doctorEmailId,
+    @GetMapping("/doctor/dataovertime/{doctorId}")
+    public List<ConsultationDTO> getDoctorsConsultationsOverTimeRange (@PathVariable("doctorId") Long doctorId,
                                                                 @RequestParam("start") String start,
                                                                 @RequestParam("stop")  String stop)throws NotFoundException,BadRequestException{
-        return reporterService.getDoctorsConsultationsOverTimeRange(doctorEmailId,DateValidator.validateDate(start),DateValidator.validateDate(stop));
+        return reporterService.getDoctorsConsultationsOverTimeRange(doctorId,DateValidator.validateDate(start),DateValidator.validateDate(stop));
     }
     @GetMapping("patients/noconsultations")
     public List<PatientDTO> getPatientsWhoWaitConsultations (){
