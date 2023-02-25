@@ -22,9 +22,17 @@ public class ReporterServiceImpl implements ReporterService{
     private final DciMeasurementRepository dciMeasurementRepository;
     private final DoctorRepository doctorRepository;
     private final ConsultationRepository consultationRepository;
+    private final ChiefDoctorRepository chiefDoctorRepository;
     private final Clock clock;
+
+    private void getChiefDoctor(Long chiefId) throws NotFoundException {
+        if (chiefDoctorRepository.findById(chiefId).isEmpty()){
+            throw new NotFoundException("No Chief Doctor with this Id : "+ chiefId);
+        }
+    }
     @Override
-    public PatientViewAccountDTO getPatientDataOverTimeRange(Long patientId, LocalDate start, LocalDate stop) throws NotFoundException {
+    public PatientViewAccountDTO getPatientDataOverTimeRange(Long patientId, LocalDate start, LocalDate stop,Long chiefId) throws NotFoundException {
+        getChiefDoctor(chiefId);
         Optional<Patient> patientOptional = patientRepository.findById(patientId);
         if (patientOptional.isPresent()){
             Patient patient = patientOptional.get();
@@ -38,7 +46,8 @@ public class ReporterServiceImpl implements ReporterService{
         }
     }
     @Override
-    public List<ConsultationDTO> getDoctorsConsultationsOverTimeRange(Long doctorId, LocalDate start, LocalDate stop) throws NotFoundException {
+    public List<ConsultationDTO> getDoctorsConsultationsOverTimeRange(Long doctorId, LocalDate start, LocalDate stop,Long chiefId) throws NotFoundException {
+        getChiefDoctor(chiefId);
         Optional<Doctor> doctorOptional = doctorRepository.findById(doctorId);
         if (doctorOptional.isPresent()){
             Doctor doctor=doctorOptional.get();
@@ -53,7 +62,8 @@ public class ReporterServiceImpl implements ReporterService{
 
     }
     @Override
-    public List<PatientDTO> getPatientsWhoWaitConsultations() {
+    public List<PatientDTO> getPatientsWhoWaitConsultations(Long chiefId)throws NotFoundException {
+        getChiefDoctor(chiefId);
 
         return patientRepository.findPatientsWaitingConsultations(LocalDate.now(clock))
                 .stream()
@@ -62,8 +72,9 @@ public class ReporterServiceImpl implements ReporterService{
     }
 
     @Override
-    public List<PatientAndNoOfConsultationsDTO> getPatientsWhoHaveBeenConsultedOverTimeRange(LocalDate start, LocalDate stop) {
+    public List<PatientAndNoOfConsultationsDTO> getPatientsWhoHaveBeenConsultedOverTimeRange(LocalDate start, LocalDate stop,Long chiefId)throws NotFoundException {
         List<Object[]> list = consultationRepository.findPatientAndNoOfConsultationsOverTimeRange(start,stop);
+        getChiefDoctor(chiefId);
 
         return list
                 .stream()
@@ -80,7 +91,8 @@ public class ReporterServiceImpl implements ReporterService{
     }
 
     @Override
-    public List<PatientDTO> getPatientsWithNoActivityOverTimeRange(LocalDate start, LocalDate stop) {
+    public List<PatientDTO> getPatientsWithNoActivityOverTimeRange(LocalDate start, LocalDate stop,Long chiefId) throws NotFoundException{
+        getChiefDoctor(chiefId);
 
 
         return patientRepository.findPatientsWithNoActivityOverTimePeriod(start,stop)
@@ -96,7 +108,8 @@ public class ReporterServiceImpl implements ReporterService{
     }
 
     @Override
-    public List<DoctorDTO> getDoctorsWithNoActivityOverTimeRange(LocalDate start, LocalDate stop) {
+    public List<DoctorDTO> getDoctorsWithNoActivityOverTimeRange(LocalDate start, LocalDate stop,Long chiefId)throws NotFoundException {
+        getChiefDoctor(chiefId);
         return doctorRepository.findDoctorsWithNoActivityOverTimePeriod(start,stop)
                 .stream()
                 .map(d->DoctorDTO.builder()
