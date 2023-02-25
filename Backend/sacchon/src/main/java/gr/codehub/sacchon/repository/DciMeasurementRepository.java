@@ -21,5 +21,8 @@ public interface DciMeasurementRepository extends JpaRepository<DciMeasurement,L
     @Query(value = "select dci from DciMeasurement dci  where dci.patient=:patient")
     List<DciMeasurement> findDciMeasurementByPatient(Patient patient);
 
+    @Query(value = "select dci from DciMeasurement dci  where dci.patient=:patient and dci.dciMeasurementDate>=:localDate")
+    List<DciMeasurement> findDciMeasurementByPatientAndAfterDate(Patient patient,LocalDate localDate);
+
 
 }

@@ -1,9 +1,15 @@
 package gr.codehub.sacchon.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import gr.codehub.sacchon.model.DciMeasurement;
 import gr.codehub.sacchon.model.Patient;
-import lombok.*;
+import gr.codehub.sacchon.validate.CustomDateDeserializer;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
@@ -17,9 +23,13 @@ public class DciMeasurementDTO {
 
     private Long dciMeasurementId;
 
+
+    @Positive(message="dciMeasurementData Data is >0")
+    @NotNull(message="dciMeasurementData Data is required field")
     private Double dciMeasurementData;
 
-    @JsonFormat(pattern = "yyyy-MM-dd")
+
+    @JsonDeserialize(using = CustomDateDeserializer.class)
     private LocalDate dciMeasurementDate;
 
     public DciMeasurementDTO(DciMeasurement dciMeasurement){

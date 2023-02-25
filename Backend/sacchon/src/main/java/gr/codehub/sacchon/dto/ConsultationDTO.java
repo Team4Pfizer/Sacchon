@@ -2,6 +2,8 @@ package gr.codehub.sacchon.dto;
 
 import gr.codehub.sacchon.model.Consultation;
 import gr.codehub.sacchon.model.Patient;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,8 +17,10 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class ConsultationDTO {
     private Long consultationId;
-    private Double consultationDosage ;
 
+    @Positive
+    private Double consultationDosage ;
+    @NotEmpty(message = "Medication Data is a required field")
     private String consultationMedication ;
 
     private LocalDate consultationDate;

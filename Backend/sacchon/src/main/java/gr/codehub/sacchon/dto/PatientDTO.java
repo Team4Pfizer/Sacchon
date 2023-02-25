@@ -1,6 +1,9 @@
 package gr.codehub.sacchon.dto;
 
 import gr.codehub.sacchon.model.Patient;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 
@@ -10,8 +13,16 @@ import lombok.*;
 @Builder
 public class PatientDTO {
     private Long patientId ;
+
+    @NotNull
+    @NotEmpty
     private String patientFirstName ;
+    @NotNull
+    @NotEmpty
     private String patientLastName ;
+    @Email
+    @NotNull
+    @NotEmpty
     private String patientEmailId ;
 
 
@@ -32,6 +43,7 @@ public class PatientDTO {
                 .patientEmailId(this.patientEmailId)
                 .patientFirstName(this.patientFirstName)
                 .patientLastName(this.patientLastName)
+                .alarm(false)
                 .build();
 
     }

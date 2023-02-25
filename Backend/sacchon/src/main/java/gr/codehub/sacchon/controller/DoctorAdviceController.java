@@ -5,6 +5,7 @@ import gr.codehub.sacchon.dto.*;
 import gr.codehub.sacchon.exception.BadRequestException;
 import gr.codehub.sacchon.exception.NotFoundException;
 import gr.codehub.sacchon.service.DoctorAdviceService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,7 +27,7 @@ public class DoctorAdviceController {
     }
 
     @PostMapping("/signup")
-    public DoctorDTO signUp(@RequestBody DoctorDTO doctorDTO) {
+    public DoctorDTO signUp(@Valid @RequestBody DoctorDTO doctorDTO) {
         return doctorAdviceService.signUp(doctorDTO);
     }
 
@@ -41,7 +42,7 @@ public class DoctorAdviceController {
     }
 
     @PostMapping("consult/{doctorId}/{patientId}")
-    public ConsultationDTO consultPatient (@RequestBody ConsultationDTO consultationDTO,
+    public ConsultationDTO consultPatient (@Valid @RequestBody ConsultationDTO consultationDTO,
                                            @PathVariable("doctorId") Long doctorId,
                                            @PathVariable("patientId") Long patientId)throws NotFoundException{
         return doctorAdviceService.consultPatient(consultationDTO,doctorId,patientId);

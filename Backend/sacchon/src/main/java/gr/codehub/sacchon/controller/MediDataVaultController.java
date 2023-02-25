@@ -5,6 +5,7 @@ import gr.codehub.sacchon.exception.BadRequestException;
 import gr.codehub.sacchon.exception.NotFoundException;
 import gr.codehub.sacchon.service.MediDataVaultService;
 import gr.codehub.sacchon.validate.DateValidator;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,7 +26,7 @@ public class MediDataVaultController {
     }
 
     @PostMapping("/signup")
-    public PatientDTO signUp (@RequestBody PatientDTO patientDTO){
+    public PatientDTO signUp (@Valid @RequestBody PatientDTO patientDTO){
         return mediDataVaultService.signUp(patientDTO);
     }
 
@@ -35,15 +36,16 @@ public class MediDataVaultController {
     }
 
     @PostMapping("/bgmeasurement/{patientEmailId}")
-    public BgMeasurementDTO addBgMeasurement(@RequestBody BgMeasurementDTO bgMeasurementDTO,
+    public BgMeasurementDTO addBgMeasurement(@Valid @RequestBody BgMeasurementDTO bgMeasurementDTO,
                                           @PathVariable("patientEmailId") String patientEmailId) throws NotFoundException {
         return mediDataVaultService.addBgMeasurement(bgMeasurementDTO,patientEmailId);
     }
 
     @PostMapping("/dcimeasurement/{patientEmailId}")
-    public DciMeasurementDTO addDciMeasurement(@RequestBody DciMeasurementDTO dciMeasurementDTO,
+    public DciMeasurementDTO addDciMeasurement(@Valid @RequestBody DciMeasurementDTO dciMeasurementDTO,
                                             @PathVariable("patientEmailId") String patientEmailId) throws NotFoundException {
         return mediDataVaultService.addDciMeasurement(dciMeasurementDTO,patientEmailId);
+
     }
 
 

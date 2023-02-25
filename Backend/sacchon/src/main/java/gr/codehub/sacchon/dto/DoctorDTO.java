@@ -1,6 +1,9 @@
 package gr.codehub.sacchon.dto;
 
 import gr.codehub.sacchon.model.Doctor;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 @Builder
@@ -8,9 +11,14 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class DoctorDTO {
+    @Email
+    @NotNull
     private String doctorEmailId ;
-
+    @NotNull
+    @NotEmpty
     private String doctorFirstName;
+    @NotNull
+    @NotEmpty
     private String doctorLastName;
 
     public DoctorDTO(Doctor doctor){

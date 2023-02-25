@@ -21,6 +21,11 @@ public interface BgMeasurementRepository extends JpaRepository<BgMeasurement,Lon
     @Query(value = "select bgm from BgMeasurement bgm  where bgm.patient=:patient")
     List<BgMeasurement> findBgMeasurementByPatient(Patient patient);
 
+    @Query(value = "select bgm from BgMeasurement bgm  where bgm.patient=:patient and bgm.BgMeasurementDate>=:localDate")
+    List<BgMeasurement> findBgMeasurementByPatientAndAfterDate(Patient patient,LocalDate localDate);
+
+
+
 
 
 }

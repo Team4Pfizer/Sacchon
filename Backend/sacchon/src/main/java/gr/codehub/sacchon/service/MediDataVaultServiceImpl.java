@@ -14,6 +14,7 @@ import gr.codehub.sacchon.repository.PatientRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.Clock;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -27,6 +28,7 @@ public class MediDataVaultServiceImpl implements MediDataVaultService {
     private final DciMeasurementRepository dciMeasurementRepository;
 
     private final ConsultationRepository consultationRepository;
+    private final Clock clock;
 
 
 
@@ -43,8 +45,8 @@ public class MediDataVaultServiceImpl implements MediDataVaultService {
         Patient patient= getPatient(patientEmailId);
         PatientViewAccountDTO patientViewAccountDTO = new PatientViewAccountDTO(
                 patient,
-                bgMeasurementRepository.findBgMeasurementByPatient(patient).stream().map(BgMeasurementDTO::new).toList(),
-                dciMeasurementRepository.findDciMeasurementByPatient(patient).stream().map(DciMeasurementDTO::new).toList());
+                bgMeasurementRepository.findBgMeasurementByPatientAndAfterDate(patient,LocalDate.now(clock).minusDays(10)).stream().map(BgMeasurementDTO::new).toList(),
+                dciMeasurementRepository.findDciMeasurementByPatientAndAfterDate(patient,LocalDate.now(clock).minusDays(10)).stream().map(DciMeasurementDTO::new).toList());
 
 
         if (patient.getAlarm()){
@@ -60,6 +62,7 @@ public class MediDataVaultServiceImpl implements MediDataVaultService {
 
     @Override
     public PatientDTO signUp(PatientDTO patientDTO) {
+
         Patient patient = patientRepository.save(patientDTO.toEntity());
         return new PatientDTO(patient);
     }
