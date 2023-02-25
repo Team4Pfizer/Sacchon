@@ -3,6 +3,7 @@ package gr.codehub.sacchon.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -33,6 +34,11 @@ public class RestResponseExceptionHandler {
     public ResponseEntity<ErrorMessage> SQLException(MethodArgumentNotValidException exception){
         ErrorMessage message = new ErrorMessage(HttpStatus.BAD_REQUEST,exception.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(message);
+    }
+    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+    public ResponseEntity<ErrorMessage> SQLException(HttpRequestMethodNotSupportedException exception){
+        ErrorMessage message = new ErrorMessage(HttpStatus.METHOD_NOT_ALLOWED,exception.getMessage());
+        return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).body(message);
     }
 
 }
