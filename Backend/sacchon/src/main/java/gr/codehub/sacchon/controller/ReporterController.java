@@ -8,6 +8,7 @@ import gr.codehub.sacchon.validate.DateValidator;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.Clock;
 import java.util.List;
 
 @RestController
@@ -15,20 +16,21 @@ import java.util.List;
 @RequestMapping("api/v1/reporter")
 public class ReporterController {
     private final ReporterService reporterService;
+    private final Clock clock;
 
 
     @GetMapping("/patient/dataovertime/{patientId}")
     public PatientViewAccountDTO getPatientDataOverTimeRange (@PathVariable("patientId") Long patientId,
                                                        @RequestParam("start") String start,
                                                        @RequestParam("stop")  String stop)throws NotFoundException, BadRequestException {
-        return reporterService.getPatientDataOverTimeRange(patientId,DateValidator.validateDate(start),DateValidator.validateDate(stop));
+        return reporterService.getPatientDataOverTimeRange(patientId,DateValidator.validateDate(start,clock),DateValidator.validateDate(stop,clock));
 
     }
     @GetMapping("/doctor/dataovertime/{doctorId}")
     public List<ConsultationDTO> getDoctorsConsultationsOverTimeRange (@PathVariable("doctorId") Long doctorId,
                                                                 @RequestParam("start") String start,
                                                                 @RequestParam("stop")  String stop)throws NotFoundException,BadRequestException{
-        return reporterService.getDoctorsConsultationsOverTimeRange(doctorId,DateValidator.validateDate(start),DateValidator.validateDate(stop));
+        return reporterService.getDoctorsConsultationsOverTimeRange(doctorId,DateValidator.validateDate(start,clock),DateValidator.validateDate(stop,clock));
     }
     @GetMapping("patients/noconsultations")
     public List<PatientDTO> getPatientsWhoWaitConsultations (){
@@ -37,18 +39,18 @@ public class ReporterController {
     @GetMapping("/patients/consultations")
     public List<PatientAndNoOfConsultationsDTO> getPatientsWhoHaveBeenConsultedOverTimeRange (@RequestParam("start") String start,
                                                                                               @RequestParam("stop")  String stop)throws BadRequestException{
-        return reporterService.getPatientsWhoHaveBeenConsultedOverTimeRange(DateValidator.validateDate(start),DateValidator.validateDate(stop));
+        return reporterService.getPatientsWhoHaveBeenConsultedOverTimeRange(DateValidator.validateDate(start,clock),DateValidator.validateDate(stop,clock));
     }
     @GetMapping("/patients/withoutactivity")
     List<PatientDTO> getPatientsWithNoActivityOverTimeRange(@RequestParam("start") String start,
                                                             @RequestParam("stop")  String stop)throws BadRequestException{
-        return reporterService.getPatientsWithNoActivityOverTimeRange(DateValidator.validateDate(start),DateValidator.validateDate(stop));
+        return reporterService.getPatientsWithNoActivityOverTimeRange(DateValidator.validateDate(start,clock),DateValidator.validateDate(stop,clock));
     }
 
     @GetMapping("/doctors/withoutactivity")
     List<DoctorDTO> getDoctorsWithNoActivityOverTimeRange(@RequestParam("start") String start,
                                                           @RequestParam("stop")  String stop)throws BadRequestException{
-        return reporterService.getDoctorsWithNoActivityOverTimeRange(DateValidator.validateDate(start),DateValidator.validateDate(stop));
+        return reporterService.getDoctorsWithNoActivityOverTimeRange(DateValidator.validateDate(start,clock),DateValidator.validateDate(stop,clock));
 
     }
 

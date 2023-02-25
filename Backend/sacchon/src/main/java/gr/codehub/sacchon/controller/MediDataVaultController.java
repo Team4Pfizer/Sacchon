@@ -8,6 +8,7 @@ import gr.codehub.sacchon.validate.DateValidator;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.Clock;
 import java.util.List;
 
 @RestController
@@ -15,7 +16,8 @@ import java.util.List;
 @RequestMapping("api/v1/medidatavault")
 public class MediDataVaultController {
 
-    private MediDataVaultService mediDataVaultService;
+    private final MediDataVaultService mediDataVaultService;
+    private final Clock clock;
 
     @GetMapping("/myaccount/{patientEmailId}")
     public PatientViewAccountDTO viewAccount(@PathVariable("patientEmailId") String patientEmailId) throws NotFoundException {
@@ -52,7 +54,7 @@ public class MediDataVaultController {
             @RequestParam("stop") String stop) throws NotFoundException, BadRequestException {
 
 
-        return mediDataVaultService.averageBgMeasurement(DateValidator.validateDate(start),DateValidator.validateDate(stop),patientEmailId);
+        return mediDataVaultService.averageBgMeasurement(DateValidator.validateDate(start,clock),DateValidator.validateDate(stop,clock),patientEmailId);
 
     }
     @GetMapping("/averagedcimeasurements/{patientEmailId}")
@@ -62,7 +64,7 @@ public class MediDataVaultController {
             @RequestParam("stop") String stop) throws NotFoundException, BadRequestException {
 
 
-        return mediDataVaultService.averageDciMeasurement(DateValidator.validateDate(start),DateValidator.validateDate(stop), patientEmailId);
+        return mediDataVaultService.averageDciMeasurement(DateValidator.validateDate(start,clock),DateValidator.validateDate(stop,clock), patientEmailId);
 
 
     }
