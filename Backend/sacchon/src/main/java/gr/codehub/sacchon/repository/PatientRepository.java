@@ -1,5 +1,6 @@
 package gr.codehub.sacchon.repository;
 
+import gr.codehub.sacchon.model.Doctor;
 import gr.codehub.sacchon.model.Patient;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -30,14 +31,17 @@ public interface PatientRepository extends JpaRepository<Patient,Long> {
             "where con.patient_id=pt.patient_id))))<=?1 AND pt.doctor_id is not null)" ,nativeQuery = true)
     List<Patient> findPatientsWaitingConsultations (LocalDate NowDate);
 
-//TODO : The query
 
 
-//    @Query(value = "select patient_id from patients pt where (select COUNT(*) from bg_measurements where bg_measurement_date>='2022-08-01' and bg_measurement_date<='2022-08-01' and bg_measurements.patient_id=pt.patient_id)=0")
+
     @Query(value = "select p.patient_id,p.patient_email_id,p.patient_first_name,p.patient_last_name from patients p where \n" +
             "(select count(*) from bg_measurements \n" +
             "where bg_measurements.bg_measurement_date>=?1 and\n" +
             "bg_measurements.bg_measurement_date<=?2 and bg_measurements.patient_id=p.patient_id)=0", nativeQuery = true)
     List<Object[]> findPatientsWithNoActivityOverTimePeriod(LocalDate start,LocalDate stop);
+
+    @Query(value = "select p from Patient p where p.patientsDoctor=:doctor")
+    List<Patient> findPatientByPatientsDoctor(Doctor doctor);
+
 
 }

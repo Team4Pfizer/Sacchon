@@ -61,6 +61,13 @@ public class DoctorAdviceServiceImpl implements DoctorAdviceService {
     public void removeAccount(Long doctorId) throws NotFoundException {
 
         Doctor doctor = getDoctor(doctorId);
+
+        List<Patient> patients = patientRepository.findPatientByPatientsDoctor(doctor);
+
+        for (Patient patient:patients){
+            patient.setPatientsDoctor(null);
+        }
+        patientRepository.saveAll(patients);
         doctorRepository.delete(doctor);
 
     }

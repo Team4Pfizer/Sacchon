@@ -28,7 +28,7 @@ public class Patient {
 
 
     @ManyToOne
-    @JoinColumn(name = "doctor_id", referencedColumnName = "doctorId")
+    @JoinColumn(name = "doctor_id", referencedColumnName = "doctorId", nullable = true)
     private Doctor patientsDoctor;
 
 

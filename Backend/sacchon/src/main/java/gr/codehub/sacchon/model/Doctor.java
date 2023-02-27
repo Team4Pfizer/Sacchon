@@ -1,7 +1,10 @@
 package gr.codehub.sacchon.model;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Set;
 
@@ -25,7 +28,6 @@ public class Doctor {
 
 
     @OneToMany(mappedBy = "patientsDoctor")
-
     private Set<Patient> patients;
 
 
