@@ -45,8 +45,8 @@ public class MediDataVaultServiceImpl implements MediDataVaultService {
         Patient patient= getPatient(patientEmailId);
         PatientViewAccountDTO patientViewAccountDTO = new PatientViewAccountDTO(
                 patient,
-                bgMeasurementRepository.findBgMeasurementByPatientAndAfterDate(patient,LocalDate.now(clock).minusDays(10)).stream().map(BgMeasurementDTO::new).toList(),
-                dciMeasurementRepository.findDciMeasurementByPatientAndAfterDate(patient,LocalDate.now(clock).minusDays(10)).stream().map(DciMeasurementDTO::new).toList());
+                bgMeasurementRepository.findBgMeasurementByPatientAndAfterDate(patient,LocalDate.now(clock).minusDays(7)).stream().map(BgMeasurementDTO::new).toList(),
+                dciMeasurementRepository.findDciMeasurementByPatientAndAfterDate(patient,LocalDate.now(clock).minusDays(7)).stream().map(DciMeasurementDTO::new).toList());
 
 
         if (patient.getAlarm()){
