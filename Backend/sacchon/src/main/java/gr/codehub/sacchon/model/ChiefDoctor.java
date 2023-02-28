@@ -2,7 +2,12 @@ package gr.codehub.sacchon.model;
 
 
 import jakarta.persistence.*;
-import lombok.*;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 
 @Entity
@@ -20,6 +25,9 @@ public class ChiefDoctor {
     private String chiefDoctorEmailId;
     private String chiefDoctorFirstName;
     private String chiefDoctorLastName;
+    @NotNull
+    @NotEmpty
+    private String chiefDoctorPassword;
 
 
 

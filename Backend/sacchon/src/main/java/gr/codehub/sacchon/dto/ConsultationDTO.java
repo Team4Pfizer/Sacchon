@@ -30,7 +30,9 @@ public class ConsultationDTO {
         this.consultationMedication=consultation.getConsultationMedication();
         this.consultationDate=consultation.getConsultationDate();
         this.consultationId=consultation.getConsultationId();
+
     }
+
 
     public Consultation toEntity(Patient patient,LocalDate creationDate){
         return Consultation

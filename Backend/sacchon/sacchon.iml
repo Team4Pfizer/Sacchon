@@ -95,6 +95,7 @@
     <orderEntry type="library" name="Maven: io.micrometer:micrometer-commons:1.10.3" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-webmvc:6.0.4" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-expression:6.0.4" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework.security:spring-security-crypto:6.0.1" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Maven: org.springframework.boot:spring-boot-devtools:3.0.2" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot:3.0.2" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-autoconfigure:3.0.2" level="project" />

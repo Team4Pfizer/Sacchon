@@ -6,4 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ChiefDoctorRepository extends JpaRepository<ChiefDoctor,Long> {
+
+    ChiefDoctor findChiefDoctorByChiefDoctorEmailId(String email);
 }

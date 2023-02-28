@@ -112,7 +112,10 @@ public class DoctorAdviceServiceImpl implements DoctorAdviceService {
 
             if ((patientOptional.get().getPatientsDoctor()!=null) && (patientOptional.get().getPatientsDoctor().equals(doctor))){
                 return new PatientForDoctorViewDTO(patient,
-                        consultationRepository.findConsultationByPatient(patient).stream().map(ConsultationDTO::new).toList(),
+                        consultationRepository.findConsultationByPatient(patient)
+                                .stream()
+                                .map(ConsultationDTO::new)
+                                .toList(),
                         bgMeasurementRepository.findBgMeasurementByPatientAndAfterDate(patient,LocalDate.now(clock).minusDays(15)).stream().map(BgMeasurementDTO::new).toList(),
                         dciMeasurementRepository.findDciMeasurementByPatientAndAfterDate(patient,LocalDate.now(clock).minusDays(15)).stream().map(DciMeasurementDTO::new).toList()
                         );
